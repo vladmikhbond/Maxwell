@@ -7,6 +7,7 @@ export class Space {
     width = doc.canvas.width;
     charges: Charge[] = []
 
+
     
     constructor() { }
 
@@ -23,7 +24,6 @@ export class Space {
             // прискор від сили Лоренца
             let vXb = vec2.mul(vec2.create(), ch.v, b)
             let ab = vec2.scale(vec2.create(), vXb,  ch.q / ch.m);
-            console.log(ae, ab)
             let a = vec2.add(vec2.create(), ae, ab);
 
             // velocity 
