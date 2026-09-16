@@ -5,7 +5,7 @@ import Charge from "../models/Charge.js";
 
 export default class View {
     space: Space
-    imData: ImageData
+
     ctx: CanvasRenderingContext2D
     ctx2: CanvasRenderingContext2D
 
@@ -13,7 +13,6 @@ export default class View {
         this.space = space;
         this.ctx = doc.canvas.getContext("2d")!;
         this.ctx2 = doc.canvas2.getContext("2d")!;
-        this.imData = this.ctx.getImageData(0, 0, 100, 100)!;
     }
 
     get isTrack(): boolean {
@@ -29,6 +28,9 @@ export default class View {
         ctx.clearRect(0, 0, this.space.width, this.space.height);
 
         for (let ch of this.space.charges) {
+            // Magnetic field strength
+            this.drawB(ch.r);
+
             this.drawSign(ch);
 
             // Electric field strength
@@ -43,8 +45,7 @@ export default class View {
                     this.drawLine(r1, ch);
                 }
             }
-            // Magnetic field strength
-            this.drawB(ch.r);
+
 
             // Track
             if (this.isTrack) {
@@ -55,33 +56,24 @@ export default class View {
     }
 
     drawB(r: vec2) {
-        const ctx = this.ctx2;
+        const Rmax = 1000
+        const ctx = this.ctx;
+        ctx.beginPath();          
+        for (let rad = 10; rad < Rmax; rad += 10) {
+            for (let angl = rad/100; angl < 2 * Math.PI; angl += Math.PI / 6) {
+                let t = vec2.fromValues(rad * Math.cos(angl), rad * Math.sin(angl))
+                let p = vec2.add(vec2.create(), r, t)
 
-        const color = (x: number, y: number, depth: number, channel: number) => {
-            const data = this.imData.data;
-            let i1 = (y * 100 + x) * 4 + channel;
-            let i2 = i1 + 4;
-            let i3 = i1 + 100 * 4;
-            let i4 = i3 + 4;
-            data[i1] = data[i2] = data[i3] = data[i4] = depth;
-        }        
+                let b = this.space.BatR(p);
 
-        // fill the blue channel
-        let x1 = r[0] - 50, y1 = r[1] - 50;
-        
-        for (let y = 0; y < 100; y++) {
-            for (let x = 0; x < 100; x++) {
-                let r1 = vec2.fromValues(x1 + x, y1 + y) 
-                let b = this.space.BatR(r1);
-                let depth = vec2.length(b) * 255000 | 0;
-                 
-                //console.log(y, x, depth)
-                color(x, y, depth, 2); // blue
-                color(x, y, 255, 3);
+                if (vec2.length(b) > 1e-4) {
+                    ctx.moveTo(p[0] - 1, p[1]);
+                    ctx.arc(p[0] - 1, p[1], 1, 0, 2 * Math.PI);
+                }
             }
         }
-        ctx.putImageData(this.imData, x1, y1);
-
+        ctx.stroke();
+        
     }
 
 
@@ -129,73 +121,35 @@ export default class View {
 
 
 //#region garbidge
-    // draw1() {
-    //     const ctx = doc.canvas.getContext("2d")!;
-    //     const K = 1; 
-    //     ctx.save();
-    //     ctx.scale(glo.SCALE, glo.SCALE);
-    //     ctx.lineWidth = 1/glo.SCALE;
-    //     ctx.clearRect(0, 0, this.space.width, this.space.height)
-    //     ctx.beginPath()
-    //     for (let y = 0; y < this.space.height; y++) {
-    //         for (let x = 0; x < this.space.width; x++) {
-    //             const e = Math.hypot(this.space.E[y][x][0], this.space.E[y][x][1]);
-    //             ctx.fillRect(x, y, 0.1, 0.1)
-    //             ctx.moveTo(x, y)
-    //             const x1 = this.space.E[y][x][0] * K 
-    //             const y1 = this.space.E[y][x][1] * K
-                
-    //             ctx.lineTo(x + x1, y + y1);
-    //         }
-    //     }
-    //     ctx.stroke();
-    //     ctx.restore();
-    // }
-
-    // draw2() {
-    //     const K = 100;
-    //     const ctx = doc.canvas.getContext("2d")!;
-    //     ctx.save();
-    //     ctx.scale(glo.SCALE, glo.SCALE);
-    //     ctx.lineWidth = 1/glo.SCALE;
-    //     for (let y = 0; y < this.space.height; y++) {
-    //         for (let x = 0; x < this.space.width; x++) {
-    //             const e = Math.hypot(this.space.E[y][x][0], this.space.E[y][x][1])
-    //             ctx.fillStyle = `rgb(
-    //                 ${Math.floor(K * e*e)}
-    //                 ${Math.floor(K * e*e)}
-    //                 ${Math.floor(K * e*e)}
-    //             )`;
-    //             ctx.fillRect(x, y, 1, 1);
-    //         }
-    //     }
-    //     ctx.restore();
-    // }
-
-
-    // draw3() {
-    //     const ctx = doc.canvas.getContext("2d")!;
+    // drawB(r: vec2) {
+    //     const ctx = this.ctx;
+    //     let imData = this.ctx.getImageData(0, 0, 100, 100)!;
 
     //     const color = (x: number, y: number, depth: number, channel: number) => {
-    //         const data = this.imData.data;
-    //         let i1 = (y * doc.canvas.width + x) * 4 + channel;
+    //         const data = imData.data;
+    //         let i1 = (y * 100 + x) * 4 + channel;
     //         let i2 = i1 + 4;
-    //         let i3 = i1 + doc.canvas.width * 4;
+    //         let i3 = i1 + 100 * 4;
     //         let i4 = i3 + 4;
     //         data[i1] = data[i2] = data[i3] = data[i4] = depth;
     //     }        
 
     //     // fill the blue channel
-    //     for (let y = 0; y < this.space.height; y++) {
-    //         for (let x = 0; x < this.space.width; x++) {
-    //             const depth = Math.floor(Math.hypot(this.space.E[y][x][0], this.space.E[y][x][1]) * 255 * 1000)
-    //             // console.log(y, x, depth)
+    //     let x1 = r[0] - 50, y1 = r[1] - 50;
+        
+    //     for (let y = 0; y < 100; y++) {
+    //         for (let x = 0; x < 100; x++) {
+    //             let r1 = vec2.fromValues(x1 + x, y1 + y) 
+    //             let b = this.space.BatR(r1);
+    //             let depth = vec2.length(b) * 255000 | 0;
+                 
+    //             //console.log(y, x, depth)
     //             color(x, y, depth, 2); // blue
-    //             color(x, y, 255, 3);
+    //             let a = depth > 50 ?  128 : 0
+    //             color(x, y, a, 3);
     //         }
     //     }
-    //     ctx.putImageData(this.imData, 0, 0);
-
+    //     ctx.putImageData(imData, x1, y1);
     // }
 //#endregion
 }
