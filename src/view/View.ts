@@ -73,9 +73,9 @@ export default class View {
             for (let x = 0; x < 100; x++) {
                 let r1 = vec2.fromValues(x1 + x, y1 + y) 
                 let b = this.space.BatR(r1);
-                let depth = vec2.length(b) * 25500 | 0;
+                let depth = vec2.length(b) * 255000 | 0;
                  
-                console.log(y, x, depth)
+                //console.log(y, x, depth)
                 color(x, y, depth, 2); // blue
                 color(x, y, 255, 3);
             }
