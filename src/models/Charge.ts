@@ -1,5 +1,6 @@
 import { vec2 } from 'gl-matrix';
 import { glo } from "../globals.js";
+import { cross2 } from "./Space.js"
 
 export default class Charge {
    r: vec2
@@ -34,23 +35,16 @@ export default class Charge {
    }
     
    // Напруженість магнітного поля, яку створює рухомий заряд в точці r
-   BatR(r: vec2): vec2 {            
+   BatR(r: vec2): number {            
       let distance = vec2.sub(vec2.create(), r, this.r);
       const distanceSquared = vec2.squaredLength(distance);
       if (distanceSquared === 0) {
-         return vec2.create();
-      }
-      // (V) x (distance)
-      let VxD = vec2.create();
-      vec2.multiply(VxD, this.v, distance); 
-      // B
-      const b = vec2.create();
-      vec2.scale(
-            b,
-            VxD,
-            glo.Kb * this.q / (distanceSquared * Math.sqrt(distanceSquared)),
-      );
-      return b;
+         return 0;
+      }      
+      let VxD = cross2(this.v, distance); 
+      // Bz
+      const Bz = VxD * glo.Kb * this.q / (distanceSquared * Math.sqrt(distanceSquared));
+      return Bz;
    }
     
 
