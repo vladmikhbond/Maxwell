@@ -2,43 +2,46 @@ import { glo, doc } from "../globals.js";
 import Charge from "./Charge.js";
 import { vec2 } from 'gl-matrix';
 
+// AxB = Ax*By - Ay*Bx
 export const cross2 = (a: vec2, b: vec2) => a[0] * b[1] - a[1] * b[0];
 
-export class Space {
+export class Space 
+{
     height = doc.canvas.height;
     width = doc.canvas.width;
     charges: Charge[] = []
 
-
-    
     constructor() { }
-
+   
     step() {
         for (let ch of this.charges) {
             if (ch.fixed) 
                 continue;
             // acceleration
-            let e = this.EatR(ch.r);
-            let b = this.BatR(ch.r);
+            let E = this.EatR(ch.r);
+            let Bz = this.BatR(ch.r);
             
             // прискор від сили Кулона
-            let ae = vec2.scale(vec2.create(), e,  glo.eps0 * ch.q / ch.m);
+            let accE = vec2.scale(vec2.create(), E,  glo.eps0 * ch.q / ch.m);
             
             // прискор від сили Лоренца
             let vx = ch.v[0], vy = ch.v[1];
-            let vB = vec2.fromValues(vy * b, -vx * b) 
-            let ab = vec2.scale(vec2.create(), vB, ch.q / ch.m)
+            let vB = vec2.fromValues(vy * Bz, -vx * Bz) 
+            let accB = vec2.scale(vec2.create(), vB, ch.q / ch.m)
 
             // velocity 
-            ch.v[0] += ab[0];
-            ch.v[1] += ab[1];
-
+            if (glo.isE) {
+                ch.v[0] += accE[0];
+                ch.v[1] += accE[1];
+            }
+            if (glo.isB) {
+                ch.v[0] += accB[0];
+                ch.v[1] += accB[1];
+            }
+            
             // coordinates
             vec2.add(ch.r, ch.r, ch.v);
         }
-
-            let r = this.charges[1].r
-            // console.log (this.BatR(r))
     }
     
     // Підраховує сумарну напруженість електричного поля в точці r

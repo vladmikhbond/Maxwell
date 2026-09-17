@@ -11,8 +11,11 @@ export const glo =
     SCALE: 1,
     INTERVAL: 100,
     time: 0,      // time in ticks (1 sec = 1000/INTERVAL ticks)
-     
+
+    isB: true,
+    isE: true, 
 }
+
 
 export const doc = 
 {

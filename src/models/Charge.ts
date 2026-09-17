@@ -19,31 +19,31 @@ export default class Charge {
 
    // Напруженість електричного поля, яку створює заряд в точці r
    EatR(r: vec2): vec2 {            
-      let distance = vec2.sub(vec2.create(), r, this.r);
-      const distanceSquared = vec2.squaredLength(distance);
-      if (distanceSquared === 0) {
+      let diff = vec2.sub(vec2.create(), r, this.r);
+      const diffSquared = vec2.squaredLength(diff);
+      if (diffSquared === 0) {
          return vec2.create();
       }
       // e
       const e = vec2.create();
       vec2.scale(
             e,
-            distance,
-            glo.Ke * this.q / (distanceSquared * Math.sqrt(distanceSquared)),
+            diff,
+            glo.Ke * this.q / (diffSquared * Math.sqrt(diffSquared)),
       );
       return e;
    }
     
    // Напруженість магнітного поля, яку створює рухомий заряд в точці r
    BatR(r: vec2): number {            
-      let distance = vec2.sub(vec2.create(), r, this.r);
-      const distanceSquared = vec2.squaredLength(distance);
-      if (distanceSquared === 0) {
+      let diff = vec2.sub(vec2.create(), r, this.r);
+      const diffSquared = vec2.squaredLength(diff);
+      if (diffSquared === 0) {
          return 0;
       }      
-      let VxD = cross2(this.v, distance); 
+      let VxD = cross2(this.v, diff); 
       // Bz
-      const Bz = VxD * glo.Kb * this.q / (distanceSquared * Math.sqrt(distanceSquared));
+      const Bz = VxD * glo.Kb * this.q / (diffSquared * Math.sqrt(diffSquared));
       return Bz;
    }
     

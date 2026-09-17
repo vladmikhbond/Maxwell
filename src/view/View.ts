@@ -19,9 +19,6 @@ export default class View {
         return (<HTMLInputElement>document.getElementById("traceModeCheckbox")).checked;
     }
 
-    get isHair(): boolean {
-        return (<HTMLInputElement>document.getElementById("hairModeCheckbox")).checked;
-    }
 
     draw() {
         const ctx = this.ctx;
@@ -29,12 +26,14 @@ export default class View {
 
         for (let ch of this.space.charges) {
             // Magnetic field strength
-            this.drawB(ch.r);
+            if (glo.isB) {
+                this.drawB(ch.r);
+            }
 
             this.drawSign(ch);
 
             // Electric field strength
-            if (this.isHair) {
+            if (glo.isE) {
                 let radius = ch.blindRadius;
                 let n = 6 * Math.sqrt(Math.abs(ch.q)) | 0;
 
@@ -62,11 +61,12 @@ export default class View {
         for (let rad = 10; rad < Rmax; rad += 10) {
             for (let angl = 0; angl < 2 * Math.PI; angl += Math.PI / 6) {
                 let t = vec2.fromValues(rad * Math.cos(angl), rad * Math.sin(angl))
+                
                 let p = vec2.add(vec2.create(), r, t)
 
                 let b = this.space.BatR(p);
 
-                if (Math.abs(b) > 1e-3) {
+                if (Math.abs(b) > 1e-5) {
                     ctx.moveTo(p[0] - 1, p[1]);
                     ctx.arc(p[0] - 1, p[1], 1, 0, 2 * Math.PI);
                 }
