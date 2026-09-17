@@ -30,8 +30,8 @@ export class Space {
             let ab = vec2.scale(vec2.create(), vB, ch.q / ch.m)
 
             // velocity 
-            ch.v[0] += ab[0] + ae[0];
-            ch.v[1] += ab[1] + ae[1];
+            ch.v[0] += ab[0];
+            ch.v[1] += ab[1];
 
             // coordinates
             vec2.add(ch.r, ch.r, ch.v);

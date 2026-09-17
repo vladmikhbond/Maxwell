@@ -60,13 +60,13 @@ export default class View {
         const ctx = this.ctx;
         ctx.beginPath();          
         for (let rad = 10; rad < Rmax; rad += 10) {
-            for (let angl = rad/100; angl < 2 * Math.PI; angl += Math.PI / 6) {
+            for (let angl = 0; angl < 2 * Math.PI; angl += Math.PI / 6) {
                 let t = vec2.fromValues(rad * Math.cos(angl), rad * Math.sin(angl))
                 let p = vec2.add(vec2.create(), r, t)
 
                 let b = this.space.BatR(p);
 
-                if (vec2.length(b) > 1e-4) {
+                if (Math.abs(b) > 1e-3) {
                     ctx.moveTo(p[0] - 1, p[1]);
                     ctx.arc(p[0] - 1, p[1], 1, 0, 2 * Math.PI);
                 }
