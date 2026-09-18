@@ -104,7 +104,7 @@ export default class View {
     drawLine(start: vec2, charge: Charge) 
     {
         let unit = Math.sign(charge.q);
-        this.ctx.strokeStyle = charge.q < 0 ? `rgb(0 0 255 / 50%)` : `rgb(255 0 0 / 50%)`;
+        this.ctx.strokeStyle = charge.q < 0 ? "rgb(0 0 255 / 50%)" : "rgb(255 0 0 / 50%)";
         this.ctx.beginPath();
         
         while (vec2.len(this.space.EatR(start)) > 0.5) 
