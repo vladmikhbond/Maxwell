@@ -23,12 +23,12 @@ export default class View {
     draw() {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, this.space.width, this.space.height);
+        // Magnetic field strength
+        if (glo.isB) {
+            this.drawB();
+        }
 
         for (let ch of this.space.charges) {
-            // Magnetic field strength
-            if (glo.isB) {
-                this.drawB(ch.r);
-            }
 
             this.drawSign(ch);
 
@@ -54,25 +54,33 @@ export default class View {
 
     }
 
-    drawB(r: vec2) {
-        const Rmax = 1000
+    drawB() {
+        const d = 4;
         const ctx = this.ctx;
-        ctx.beginPath();          
-        for (let rad = 10; rad < Rmax; rad += 10) {
-            for (let angl = 0; angl < 2 * Math.PI; angl += Math.PI / 6) {
-                let t = vec2.fromValues(rad * Math.cos(angl), rad * Math.sin(angl))
-                
-                let p = vec2.add(vec2.create(), r, t)
 
-                let b = this.space.BatR(p);
+        // Bmax
+        let bs = this.space.charges.map(ch => {
+            let p = vec2.fromValues(ch.r[0] - 5, ch.r[1]);
+            return Math.abs(ch.BatR(p))
+        })
+ 
+        const Bmax = Math.max(...bs) / 100
 
-                if (Math.abs(b) > 1e-5) {
-                    ctx.moveTo(p[0] - 1, p[1]);
-                    ctx.arc(p[0] - 1, p[1], 1, 0, 2 * Math.PI);
+        for (let x = 0; x < this.space.width; x += d) {
+            for (let y = 0; y < this.space.height; y += d)  {
+
+                let p = vec2.fromValues(x + d/2, y + d/2)
+                let B = Math.abs(this.space.BatR(p));
+                let c = 255 * (1 - B / Bmax) | 0;
+                if (c > 255) c = 255
+                if (Math.abs(B) > 1e-5) {
+                    ctx.fillStyle = `rgb(${c} ${c} ${c})`;
+                    ctx.fillRect(x, y, d, d)
+
                 }
             }
         }
-        ctx.stroke();
+
         
     }
 

@@ -21,7 +21,7 @@ export default class Charge {
    EatR(r: vec2): vec2 {            
       let diff = vec2.sub(vec2.create(), r, this.r);
       const diffSquared = vec2.squaredLength(diff);
-      if (diffSquared === 0) {
+      if (diffSquared < 25) {    //TODO
          return vec2.create();
       }
       // e
@@ -38,7 +38,7 @@ export default class Charge {
    BatR(r: vec2): number {            
       let diff = vec2.sub(vec2.create(), r, this.r);
       const diffSquared = vec2.squaredLength(diff);
-      if (diffSquared === 0) {
+      if (diffSquared < 25) {    //TODO
          return 0;
       }      
       let VxD = cross2(this.v, diff); 
