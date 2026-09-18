@@ -55,13 +55,13 @@ export default class View {
     }
 
     drawB() {
-        const d = 4;
+        const d = 8;
         const ctx = this.ctx;
 
         // Bmax
         let bs = this.space.charges.map(ch => {
             let p = vec2.fromValues(ch.r[0] - 5, ch.r[1]);
-            return Math.abs(ch.BatR(p))
+            return Math.abs(ch.BatR(p));
         })
  
         const Bmax = Math.max(...bs) / 100
@@ -70,14 +70,15 @@ export default class View {
             for (let y = 0; y < this.space.height; y += d)  {
 
                 let p = vec2.fromValues(x + d/2, y + d/2)
-                let B = Math.abs(this.space.BatR(p));
-                let c = 255 * (1 - B / Bmax) | 0;
-                if (c > 255) c = 255
-                if (Math.abs(B) > 1e-5) {
-                    ctx.fillStyle = `rgb(${c} ${c} ${c})`;
-                    ctx.fillRect(x, y, d, d)
-
+                let B = this.space.BatR(p);
+                let deep = 255 * (1 - Math.abs(B) / Bmax);
+                if (deep > 255) deep = 255
+                if (B < 0) {
+                    ctx.fillStyle = `rgb(${deep} 255 255)`;                    
+                } else {
+                    ctx.fillStyle = `rgb(255 255 ${deep})`;  
                 }
+                ctx.fillRect(x, y, d, d);
             }
         }
 

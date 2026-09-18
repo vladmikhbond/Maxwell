@@ -9,7 +9,7 @@ export const glo =
     eps0: 1 / (Ke * 4 * Math.PI),
     miu0: Kb * 4 * Math.PI,
     SCALE: 1,
-    INTERVAL: 100,
+    INTERVAL: 10,
     time: 0,      // time in ticks (1 sec = 1000/INTERVAL ticks)
 
     isB: true,
