@@ -1,6 +1,6 @@
 :root {
-    --canvas-width: 800px;
-    --canvas-height: 600px;
+    --canvas-width: 500px;
+    --canvas-height: 500px;
     --element-height: 50px;
 }
 
@@ -64,8 +64,6 @@ section {
     top: 0;
     left: 0;
     border: solid thin red;
-    /* width: 800px;
-    height: 800px; */
 }
 
 #canvas {
