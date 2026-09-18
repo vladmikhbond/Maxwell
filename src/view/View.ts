@@ -74,9 +74,9 @@ export default class View {
                 let deep = 255 * (1 - Math.abs(B) / Bmax);
                 if (deep > 255) deep = 255
                 if (B < 0) {
-                    ctx.fillStyle = `rgb(${deep} 255 255)`;                    
+                    ctx.fillStyle = `rgb(${deep} 255 255 / 50%)`;                    
                 } else {
-                    ctx.fillStyle = `rgb(255 255 ${deep})`;  
+                    ctx.fillStyle = `rgb(255 255 ${deep} / 50%)`;  
                 }
                 ctx.fillRect(x, y, d, d);
             }
@@ -104,7 +104,7 @@ export default class View {
     drawLine(start: vec2, charge: Charge) 
     {
         let unit = Math.sign(charge.q);
-        this.ctx.strokeStyle = charge.q < 0 ? "blue" : "red";
+        this.ctx.strokeStyle = charge.q < 0 ? `rgb(0 0 255 / 50%)` : `rgb(255 0 0 / 50%)`;
         this.ctx.beginPath();
         
         while (vec2.len(this.space.EatR(start)) > 0.5) 
@@ -127,38 +127,4 @@ export default class View {
         this.ctx.restore(); 
     }
 
-
-
-//#region garbidge
-    // drawB(r: vec2) {
-    //     const ctx = this.ctx;
-    //     let imData = this.ctx.getImageData(0, 0, 100, 100)!;
-
-    //     const color = (x: number, y: number, depth: number, channel: number) => {
-    //         const data = imData.data;
-    //         let i1 = (y * 100 + x) * 4 + channel;
-    //         let i2 = i1 + 4;
-    //         let i3 = i1 + 100 * 4;
-    //         let i4 = i3 + 4;
-    //         data[i1] = data[i2] = data[i3] = data[i4] = depth;
-    //     }        
-
-    //     // fill the blue channel
-    //     let x1 = r[0] - 50, y1 = r[1] - 50;
-        
-    //     for (let y = 0; y < 100; y++) {
-    //         for (let x = 0; x < 100; x++) {
-    //             let r1 = vec2.fromValues(x1 + x, y1 + y) 
-    //             let b = this.space.BatR(r1);
-    //             let depth = vec2.length(b) * 255000 | 0;
-                 
-    //             //console.log(y, x, depth)
-    //             color(x, y, depth, 2); // blue
-    //             let a = depth > 50 ?  128 : 0
-    //             color(x, y, a, 3);
-    //         }
-    //     }
-    //     ctx.putImageData(imData, x1, y1);
-    // }
-//#endregion
 }
