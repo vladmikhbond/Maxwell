@@ -21,14 +21,14 @@
 
           <select id="createMode" aria-label="Select" required>
               <option value="Info">Info</option>
-              <option value="Ball" selected >Ball</option>
-              <option value="Line">Line</option>
-              <option value="Link">Link</option>
+              <option value="Charge" selected >Charge</option>
+              <option value="Wire">Wire</option>
+              <option value="Magnet">Magnet</option>
           </select>     
 
-          <input id="ballParams" type="text" value="st=0" style="display: inline;" >
-          <input id="lineParams" type="text" value="" style="display: none;">
-          <input id="linkParams" type="text" value="t=0" style="display: none;">
+          <input id="chargeParams" type="text" value="q=10" style="display: inline;" >
+          <input id="wireParams" type="text" value="" style="display: none;">
+          <input id="magnetParams" type="text" value="t=0" style="display: none;">
 
           <button id="runButton" title="Run | Stop">Run</button>
           <button id="helpButton" title="Help" class="outline">Help</button>

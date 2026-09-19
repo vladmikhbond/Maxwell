@@ -1,7 +1,7 @@
-import { Controller } from "./controller/Controller.js";
+import Controller from "./controller/Controller.js";
 import { glo } from "./globals.js"; 
 import Charge from './models/Charge.js';
-import { Space } from "./models/Space.js";
+import  Space  from "./models/Space.js";
 import View from "./view/View.js";
 
 

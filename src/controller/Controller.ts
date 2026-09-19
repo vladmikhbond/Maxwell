@@ -1,25 +1,72 @@
 import { glo, doc } from "../globals.js";
-import { Space } from "../models/Space.js";
+import Space from "../models/Space.js";
 import View from "../view/View.js";
+import ChargeHandler from "./ChargeHandler.js";
+
+import Handler from "./Handler.js";
+
 import { getSizeParams } from "./params.js";
 
-export class Controller 
+enum CreateMode {
+    Info,
+    Charge,
+}
+
+export default class Controller 
 {
 
     public space: Space;
     public view: View;
+    chargeHandler = new ChargeHandler(this);
+
     timer: ReturnType<typeof setInterval> | 0 = 0;
+
+    //#region CreateMode
+    private _createMode = CreateMode.Charge;
+
+    set createMode(mode: CreateMode) 
+    {
+        let gas = document.getElementById("gasParams")!.style;
+        let wal = document.getElementById("wallParams")!.style;
+        let dev = document.getElementById("devsParams")!.style;
+        gas.display = wal.display = dev.display = "none";
+
+        this._createMode = mode;
+        switch(mode) {
+            case CreateMode.Info:
+                break;
+            case CreateMode.Charge:
+                this.switchHandlers(this.chargeHandler);
+                gas.display = "inline";
+                break;
+            
+        }
+                 
+    }
+
+    get createMode() {
+        return this._createMode;
+    }
+
+    private switchHandlers(handler: Handler)  {
+        doc.canvas.onmousedown = (e) => handler.mousedown(e);
+        doc.canvas.onmousemove = (e) => handler.mousemove(e);
+        doc.canvas.onmouseup = (e) => handler.mouseup(e);
+        doc.canvas.onkeydown = (e) => handler.keydown(e);
+    }
+    //#endregion CreateMode
 
 
     // private intervalId = 0;   // base field for timeMode property
 
     // private _mousePos = new Point(0, 0);
-    // private _createMode = CreateMode.Ball;
+    
 
 
     constructor(space: Space, view: View) {
         this.space = space;
         this.view = view;
+        this.chargeHandler = new ChargeHandler(this);
 
         //
         this.addEventHandlers();
@@ -36,7 +83,8 @@ export class Controller
     }
 
 
-    addEventHandlers() {
+    addEventHandlers() 
+    {
         // Size params changed 
         document.getElementById("sizeParams")!.addEventListener("keydown", (e: KeyboardEvent) => 
         {

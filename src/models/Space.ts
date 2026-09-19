@@ -5,7 +5,7 @@ import { vec2 } from 'gl-matrix';
 // AxB = Ax*By - Ay*Bx
 export const cross2 = (a: vec2, b: vec2) => a[0] * b[1] - a[1] * b[0];
 
-export class Space 
+export default class Space 
 {
     height = doc.canvas.height;
     width = doc.canvas.width;
