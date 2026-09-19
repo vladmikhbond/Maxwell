@@ -3,6 +3,8 @@
 // import Controller from './Controller.js';
 import { vec2 } from 'gl-matrix';
 import Handler from './Handler.js';
+import { getChargeParams } from './params.js';
+import Charge from '../models/Charge.js';
 // import { getGasParams } from './params.js';
 
 const CLICK_DIST = 3;
@@ -45,6 +47,12 @@ export default class ChargeHandler extends Handler {
         // just mouse click
         if (drawDist <= CLICK_DIST) {
             this.space.trySelectCharge(x1, y1);
+        } else {
+            let ps = getChargeParams();
+            if (ps) {
+                const [q, vx, vy] = ps;
+                this.space.charges.push(new Charge(q, x2, y2, vx, vy, 1, false))
+            }
         }
         this.view.draw();  
     }
