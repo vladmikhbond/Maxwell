@@ -1,4 +1,5 @@
 import { doc } from '../globals.js';
+import Charge from '../models/Charge.js';
 import Space from '../models/Space.js';
 import View from '../view/View.js';
 import Controller from './Controller.js';
@@ -7,7 +8,7 @@ export default class Handler {
     protected currentX = 0;
     protected currentY = 0;
     protected isDrawing = false;
-    // protected draggingObject: Device | Line | Ball | null = null;
+    protected draggingObject: Charge | null = null;
 
 
     view: View;
@@ -28,22 +29,22 @@ export default class Handler {
     }
 
     mousemove(e: MouseEvent) {
-        (<HTMLElement>document.getElementById('info2')!).innerHTML = `${e.offsetX}, ${e.offsetY}`;
+        // (<HTMLElement>document.getElementById('info2')!).innerHTML = `${e.offsetX}, ${e.offsetY}`;
 
         if (!this.isDrawing) {
             return;
         }
-        // if (this.draggingObject && (this.draggingObject === this.space.selectedLine || this.draggingObject === this.space.selectedDevice)) {
-        //     let dx = e.offsetX - this.currentX;
-        //     let dy = e.offsetY - this.currentY;
-        //     this.currentX = e.offsetX;
-        //     this.currentY = e.offsetY;
-        //     this.draggingObject.move(dx, dy);
-        //     this.view.draw();
-        // } else {
-        //     this.view.draw();
-        //     this.view.drawGrayRect(this.currentX, this.currentY, e.offsetX, e.offsetY);
-        // }
+        if (this.draggingObject) {
+            let dx = e.offsetX - this.currentX;
+            let dy = e.offsetY - this.currentY;
+            this.currentX = e.offsetX;
+            this.currentY = e.offsetY;
+            this.draggingObject.move(dx, dy);
+            this.view.draw();
+        } else {
+            this.view.draw();
+            this.view.drawGrayRect(this.currentX, this.currentY, e.offsetX, e.offsetY);
+        }
 
     }
 
@@ -51,41 +52,14 @@ export default class Handler {
 
     keydown(e: KeyboardEvent) { 
         switch (e.key) {
-            // case 'P': case 'p': case 'V': case 'v': case 'T': case 't': case 'S': case 's': case 'X': case 'x':
-            //     // маштабування тиску на PV і TV-діаграмі
-            //     if (this.space.plunger) {
-            //         this.space.plunger.scale(e.key);
-            //         this.view.drawMeasure();
-            //     }
-            //     break;
-            // case '0':
-            //     // очистити журнал вимірювань
-            //     if (this.space.plunger) {
-            //         this.space.plunger.clearMeterings();
-            //         this.view.drawMeasure();
-            //     }
-            //     break;
-            // case '1': 
-            //     this.controller.stop();            
-            //     this.controller.step();
-            //     break;
-            // case 'f':
-            //     // зафіксувати-розфіксувати поршень
-            //     if (this.space.plunger) {
-            //         this.space.plunger.fixed = !this.space.plunger.fixed;
-            //         this.view.draw();
-            //     }
-            //     break;
+            // do one step
+            case '1':
+                this.controller.stop();            
+                this.controller.step();
+                break;
+
         }
     }
-
-
-    // selectObject(x: number, y: number) {
-
-    //     this.space.selectLine(x, y);
-    //     this.space.selectBall(x, y);
-    //     this.space.selectDevice(x, y);
-    // }
 
 
 }

@@ -7,9 +7,12 @@ export const cross2 = (a: vec2, b: vec2) => a[0] * b[1] - a[1] * b[0];
 
 export default class Space 
 {
+
     height = doc.canvas.height;
     width = doc.canvas.width;
     charges: Charge[] = []
+
+    selectedCharge: Charge | null = null;
 
     constructor() { }
    
@@ -62,9 +65,25 @@ export default class Space
         return sum;
     }
 
+///// SEL
 
+    trySelectCharge(x: number, y: number) {
+        this.selectedCharge = null;
+        for (let ch of this.charges) {
+            if (ch.isInside(vec2.fromValues(x, y))) {
+                this.selectedCharge = ch;
+                break;
+            }
+        }
+    }
 
-
+    removeSelectedCharge() {
+        if (! this.selectedCharge)
+            return;
+        let idx = this.charges.indexOf(this.selectedCharge);
+        this.charges.splice(idx, 1);
+        this.selectedCharge = null;
+    }
 
 
 

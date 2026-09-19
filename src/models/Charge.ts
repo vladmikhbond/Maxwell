@@ -52,4 +52,17 @@ export default class Charge {
       const K = 5;
       return Math.sqrt(Math.abs(this.q)) * K;
    }
+
+   isInside(r: vec2) {
+      return vec2.distance(r, this.r) < this.blindRadius;        
+   }
+
+   move(dx:number, dy: number) {
+      this.r[0] += dx;
+      this.r[1] += dy;
+   }
+
+
+
+   
 }

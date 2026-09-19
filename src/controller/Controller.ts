@@ -10,6 +10,8 @@ import { getSizeParams } from "./params.js";
 enum CreateMode {
     Info,
     Charge,
+    Wire,
+    Magnet
 }
 
 export default class Controller 
@@ -26,10 +28,10 @@ export default class Controller
 
     set createMode(mode: CreateMode) 
     {
-        let gas = document.getElementById("gasParams")!.style;
-        let wal = document.getElementById("wallParams")!.style;
-        let dev = document.getElementById("devsParams")!.style;
-        gas.display = wal.display = dev.display = "none";
+        let charge = document.getElementById("chargeParams")!.style;
+        let wire = document.getElementById("wireParams")!.style;
+        let magnet = document.getElementById("magnetParams")!.style;
+        charge.display = wire.display = magnet.display = "none";
 
         this._createMode = mode;
         switch(mode) {
@@ -37,7 +39,7 @@ export default class Controller
                 break;
             case CreateMode.Charge:
                 this.switchHandlers(this.chargeHandler);
-                gas.display = "inline";
+                charge.display = "inline";
                 break;
             
         }
@@ -70,6 +72,7 @@ export default class Controller
 
         //
         this.addEventHandlers();
+        this.switchHandlers(this.chargeHandler)
 
     }
     setModelSize() {
@@ -98,29 +101,39 @@ export default class Controller
             }                
         }); 
 
+        // Change Create Mode
+        document.getElementById("createMode")!.addEventListener("change", (e: Event) =>
+        {
+            let str = (e.target as HTMLSelectElement).value;
+            const key = str as keyof typeof CreateMode;
+            this.createMode = CreateMode[key];            
+        });
 
+        // Switch E tension on or off
         document.getElementById("E_Checkbox")?.addEventListener("change", e => {
            glo.isE = (e.target as HTMLInputElement).checked;
            this.view.draw();
         });
 
+        // Switch B tension on or off
         document.getElementById("B_Checkbox")?.addEventListener("change", e => {
            glo.isB = (e.target as HTMLInputElement).checked;
            this.view.draw();
         });
+
 
         document.getElementById("runButton")?.addEventListener("click", e => {
             if (this.timer) this.stop(); 
             else this.run();           
         });
 
-        // do one step
-        document.addEventListener("keydown", (e: KeyboardEvent) => {
-            if (e.key == "1") {
-                this.stop();
-                this.step();
-            }
-        }); 
+        // // do one step
+        // document.addEventListener("keydown", (e: KeyboardEvent) => {
+        //     if (e.key == "1") {
+        //         this.stop();
+        //         this.step();
+        //     }
+        // }); 
     }
 
     step() {

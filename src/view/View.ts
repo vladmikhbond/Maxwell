@@ -1,4 +1,4 @@
-import { Space } from "../models/Space.js";
+import Space from "../models/Space.js";
 import { glo, doc } from "../globals.js"; 
 import { vec2 } from "gl-matrix";
 import Charge from "../models/Charge.js";
@@ -89,11 +89,16 @@ export default class View {
 
 
     drawSign(ch: Charge) {
-        const d = 1
+        let d = 1;
+        if (ch === this.space.selectedCharge) {
+            d = 2;
+        }
         if (ch.q < 0) {
+            // minus
             this.ctx.fillStyle = "blue";
             this.ctx.fillRect(ch.r[0]-4*d, ch.r[1]-d, 8*d, 2*d); // hor
         } else {
+            // plus
             this.ctx.fillStyle = "red";
             this.ctx.fillRect(ch.r[0]-4*d, ch.r[1]-d, 8*d, 2*d); // hor
             this.ctx.fillRect(ch.r[0]-d, ch.r[1]-4*d, 2*d, 8*d); // ver
@@ -127,4 +132,19 @@ export default class View {
         this.ctx.restore(); 
     }
 
+
+    //#region Gray Zone
+
+    drawGrayRect(x1: number, y1: number, x2: number, y2: number,) {
+        const ctx = this.ctx;
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = ctx.fillStyle = 'gray'; 
+        ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+        //
+        // let w = (x2 - x1).toFixed(2);
+        // let h = (y2 - y1).toFixed(2);
+        // let text = x2 - x1 < glo.quant && y2 - y1 < glo.quant ? '██' :  `${w} x ${h}`;
+        // ctx.fillText(text, x2, y2);
+    }
+    //#endregion Gray Zone
 }
