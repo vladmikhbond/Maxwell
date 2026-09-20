@@ -47,6 +47,11 @@ export default class ChargeHandler extends Handler {
         // just mouse click
         if (drawDist <= CLICK_DIST) {
             this.space.trySelectCharge(x1, y1);
+            let ch = this.space.selectedCharge;
+            if (ch) {
+                const line = `q=${ch.q}, vx=${ch.v[0].toFixed(1)}, vy=${ch.v[1].toFixed(1)}, m=${ch.m}, f=${ch.fixed ? 1 : 0}`;
+                (<HTMLInputElement>document.getElementById("chargeParams")).value = line;
+            }
         } else {
             let ps = getChargeParams();
             if (ps) {

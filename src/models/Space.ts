@@ -67,14 +67,16 @@ export default class Space
 
 ///// SEL
 
-    trySelectCharge(x: number, y: number) {
+    trySelectCharge(x: number, y: number): boolean {
         this.selectedCharge = null;
         for (let ch of this.charges) {
             if (ch.isInside(vec2.fromValues(x, y))) {
                 this.selectedCharge = ch;
+                return true;
                 break;
             }
         }
+        return false;
     }
 
     removeSelectedCharge() {

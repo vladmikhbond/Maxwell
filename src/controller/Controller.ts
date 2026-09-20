@@ -1,3 +1,4 @@
+import { vec2 } from "gl-matrix";
 import { glo, doc } from "../globals.js";
 import Space from "../models/Space.js";
 import View from "../view/View.js";
@@ -5,7 +6,7 @@ import ChargeHandler from "./ChargeHandler.js";
 
 import Handler from "./Handler.js";
 
-import { getSizeParams } from "./params.js";
+import { getSizeParams, getChargeParams } from "./params.js";
 
 enum CreateMode {
     Info,
@@ -96,6 +97,23 @@ export default class Controller
                 if (size) {
                     [this.space.width, this.space.height] = size;
                     this.setModelSize();
+                    this.view.draw();
+                }
+            }                
+        }); 
+
+        // Charge params changed 
+        document.getElementById("chargeParams")!.addEventListener("keydown", (e: KeyboardEvent) => 
+        {
+            if (e.key == "Enter") {
+                const params = getChargeParams();
+                const selCharge = this.space.selectedCharge
+                if (params && selCharge) {
+                    let [q, vx, vy, m, f] = params;
+                    selCharge.v = vec2.fromValues(vx, vy);
+                    selCharge.q = q;
+                    selCharge.m = m;
+                    selCharge.fixed = f == 1;
                     this.view.draw();
                 }
             }                

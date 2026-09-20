@@ -1,5 +1,5 @@
 type N2 = [number, number];
-type N3 = [number, number, number];
+type N5 = [number, number, number, number, number];
 
 export function getSizeParams(): N2 | null
 {
@@ -25,15 +25,15 @@ export function getSizeParams(): N2 | null
     return ps;
 }
 
-export function getChargeParams(): N3 | null
+export function getChargeParams(): N5 | null
 {
     const paramsElement = (document.getElementById("chargeParams") as HTMLInputElement)!;
-    let ps: N3;
+    let ps: N5;
     try {
         ps = (new Function("", 
-            "let q, vx, vy;" + 
+            "let q, vx, vy, m, f;" + 
             paramsElement.value + 
-            "; return [q, vx, vy]" 
+            "; return [q, vx, vy, m, f]" 
         ))();
     } catch {
         return errMesage("Grammar error", paramsElement);
