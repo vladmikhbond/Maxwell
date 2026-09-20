@@ -41,10 +41,11 @@ export default class Handler {
             this.currentY = e.offsetY;
             this.draggingObject.move(dx, dy);
             this.view.draw();
-        } else {
-            this.view.draw();
-            this.view.drawGrayRect(this.currentX, this.currentY, e.offsetX, e.offsetY);
-        }
+        } 
+        // else {
+        //     this.view.draw();
+        //     this.view.drawGrayRect(this.currentX, this.currentY, e.offsetX, e.offsetY);
+        // }
 
     }
 

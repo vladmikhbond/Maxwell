@@ -55,7 +55,7 @@ export default class View {
     }
 
     drawB() {
-        const d = 8;
+        const dx = 8;
         const ctx = this.ctx;
 
         // Bmax
@@ -64,12 +64,16 @@ export default class View {
             return Math.abs(ch.BatR(p));
         })
  
-        const Bmax = Math.max(...bs) / 100
+        const Bmax = Math.max(...bs) / 100;
+        // No B at all
+        if (Bmax == 0) {
+            return;
+        }
 
-        for (let x = 0; x < this.space.width; x += d) {
-            for (let y = 0; y < this.space.height; y += d)  {
+        for (let x = 0; x < this.space.width; x += dx) {
+            for (let y = 0; y < this.space.height; y += dx)  {
 
-                let p = vec2.fromValues(x + d/2, y + d/2)
+                let p = vec2.fromValues(x + dx/2, y + dx/2)
                 let B = this.space.BatR(p);
                 let deep = 255 * (1 - Math.abs(B) / Bmax);
                 if (deep > 255) deep = 255
@@ -78,7 +82,7 @@ export default class View {
                 } else {
                     ctx.fillStyle = `rgb(255 255 ${deep} / 50%)`;  
                 }
-                ctx.fillRect(x, y, d, d);
+                ctx.fillRect(x, y, dx, dx);
             }
         }
 
@@ -135,16 +139,28 @@ export default class View {
 
     //#region Gray Zone
 
-    drawGrayRect(x1: number, y1: number, x2: number, y2: number,) {
+    // drawGrayRect(x1: number, y1: number, x2: number, y2: number,) {
+    //     const ctx = this.ctx;
+    //     ctx.lineWidth = 1;
+    //     ctx.strokeStyle = ctx.fillStyle = 'gray'; 
+    //     ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+    //     //
+    //     // let w = (x2 - x1).toFixed(2);
+    //     // let h = (y2 - y1).toFixed(2);
+    //     // let text = x2 - x1 < glo.quant && y2 - y1 < glo.quant ? '██' :  `${w} x ${h}`;
+    //     // ctx.fillText(text, x2, y2);
+    // }
+
+    
+    drawGrayArc(x0: number, y0: number, x: number, y: number,) {
         const ctx = this.ctx;
         ctx.lineWidth = 1;
         ctx.strokeStyle = ctx.fillStyle = 'gray'; 
-        ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
-        //
-        // let w = (x2 - x1).toFixed(2);
-        // let h = (y2 - y1).toFixed(2);
-        // let text = x2 - x1 < glo.quant && y2 - y1 < glo.quant ? '██' :  `${w} x ${h}`;
-        // ctx.fillText(text, x2, y2);
+        ctx.beginPath();
+        let radius = Math.hypot(x0 - x, y0 - y);
+        ctx.moveTo(x0-radius, y0);
+        ctx.arc(x0-radius, y0, radius, 0, Math.PI*2);
     }
+
     //#endregion Gray Zone
 }

@@ -26,7 +26,7 @@ export default class ChargeHandler extends Handler {
             return;
 
         this.view.draw();
-        // this.view.drawGrayRect(this.currentX, this.currentY, e.offsetX, e.offsetY);
+        this.view.drawGrayArc(this.currentX, this.currentY, e.offsetX, e.offsetY);
         
     }
 
@@ -46,6 +46,7 @@ export default class ChargeHandler extends Handler {
 
         // just mouse click
         if (drawDist <= CLICK_DIST) {
+            // Try to select charge
             this.space.trySelectCharge(x1, y1);
             let ch = this.space.selectedCharge;
             if (ch) {
@@ -53,10 +54,13 @@ export default class ChargeHandler extends Handler {
                 (<HTMLInputElement>document.getElementById("chargeParams")).value = line;
             }
         } else {
-            let ps = getChargeParams();
-            if (ps) {
-                const [q, vx, vy] = ps;
-                this.space.charges.push(new Charge(q, x2, y2, vx, vy, 1, false))
+            // Create new charge & selest it
+            let params = getChargeParams();
+            if (params) {
+                const [q, vx, vy, m, f] = params;
+                const newCharge = new Charge(q, x1, y1, vx, vy, m, f==1);
+                this.space.charges.push(newCharge);
+                this.space.selectedCharge = newCharge;
             }
         }
         this.view.draw();  
