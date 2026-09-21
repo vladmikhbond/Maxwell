@@ -3,7 +3,7 @@
 // import Controller from './Controller.js';
 import { vec2 } from 'gl-matrix';
 import Handler from './Handler.js';
-import { getChargeParams } from './params.js';
+import { getChargeParams, setChargeParams } from './params.js';
 import Charge from '../models/Charge.js';
 // import { getGasParams } from './params.js';
 
@@ -48,19 +48,20 @@ export default class ChargeHandler extends Handler {
         if (drawDist <= CLICK_DIST) {
             // Try to select charge
             this.space.trySelectCharge(x1, y1);
-            let ch = this.space.selectedCharge;
-            if (ch) {
-                const line = `q=${ch.q}, vx=${ch.v[0].toFixed(1)}, vy=${ch.v[1].toFixed(1)}, m=${ch.m}, f=${ch.fixed ? 1 : 0}`;
-                (<HTMLInputElement>document.getElementById("chargeParams")).value = line;
+            if (this.space.selectedCharge) {
+                setChargeParams(this.space.selectedCharge);
             }
         } else {
             // Create new charge & selest it
             let params = getChargeParams();
             if (params) {
-                const [q, vx, vy, m, f] = params;
+                let [q, vx, vy, m, f] = params;
+                vx = (x2 - x1) / 10;
+                vy = (y2 - y1) / 10;
                 const newCharge = new Charge(q, x1, y1, vx, vy, m, f==1);
                 this.space.charges.push(newCharge);
                 this.space.selectedCharge = newCharge;
+                setChargeParams(newCharge);
             }
         }
         this.view.draw();  

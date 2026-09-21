@@ -1,52 +1,56 @@
+import Charge from "../models/Charge";
+
 type N2 = [number, number];
 type N5 = [number, number, number, number, number];
 
+const sizeParams = (document.getElementById("sizeParams") as HTMLInputElement)!;
+const chargeParams = (document.getElementById("chargeParams") as HTMLInputElement)!;
+
 export function getSizeParams(): N2 | null
 {
-    const paramsElement = (document.getElementById("sizeParams") as HTMLInputElement)!;
-    let ps: N2;
+    let params: N2;
     try {
-        ps = (new Function("", 
+        params = (new Function("", 
             "let W, H;" + 
-            paramsElement.value + 
+            sizeParams.value + 
             "; return [W, H]" 
         ))();
     } catch {
-        return errMesage("Grammar error", paramsElement);
+        return errMesage("Grammar error", sizeParams);
     }
     // перевірки
-    if (ps[0] == undefined || ps[0] <= 0) 
-        return errMesage("W: W > 0", paramsElement);
+    if (params[0] == undefined || params[0] <= 0) 
+        return errMesage("W: W > 0", sizeParams);
 
-    if (ps[1] == undefined || ps[1] <= 0) 
-        return errMesage("H: H > 0", paramsElement);
+    if (params[1] == undefined || params[1] <= 0) 
+        return errMesage("H: H > 0", sizeParams);
 
-    paramsElement.style.backgroundColor = "";
-    return ps;
+    sizeParams.style.backgroundColor = "";
+    return params;
 }
 
 export function getChargeParams(): N5 | null
 {
-    const paramsElement = (document.getElementById("chargeParams") as HTMLInputElement)!;
-    let ps: N5;
+    let params: N5;
     try {
-        ps = (new Function("", 
+        params = (new Function("", 
             "let q, vx, vy, m, f;" + 
-            paramsElement.value + 
+            chargeParams.value + 
             "; return [q, vx, vy, m, f]" 
         ))();
     } catch {
-        return errMesage("Grammar error", paramsElement);
+        return errMesage("Grammar error", chargeParams);
     }
     // перевірки
-    // if (ps[0] == undefined || ps[0] <= 0) 
-    //     return errMesage("W: W > 0", paramsElement);
+    // ...
 
-    // if (ps[1] == undefined || ps[1] <= 0) 
-    //     return errMesage("H: H > 0", paramsElement);
+    chargeParams.style.backgroundColor = "";
+    return params;
+}
 
-    paramsElement.style.backgroundColor = "";
-    return ps;
+export function setChargeParams(ch: Charge) {
+    const line = `q=${ch.q}, vx=${ch.v[0].toFixed(1)}, vy=${ch.v[1].toFixed(1)}, m=${ch.m}, f=${ch.fixed ? 1 : 0}`;
+    chargeParams.value = line;
 }
 
 

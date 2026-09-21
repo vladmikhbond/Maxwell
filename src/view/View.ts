@@ -89,9 +89,6 @@ export default class View {
         
     }
 
-
-
-
     drawSign(ch: Charge) {
         let d = 1;
         if (ch === this.space.selectedCharge) {
@@ -155,11 +152,15 @@ export default class View {
     drawGrayArc(x0: number, y0: number, x: number, y: number,) {
         const ctx = this.ctx;
         ctx.lineWidth = 1;
-        ctx.strokeStyle = ctx.fillStyle = 'gray'; 
-        ctx.beginPath();
-        let radius = Math.hypot(x0 - x, y0 - y);
-        ctx.moveTo(x0-radius, y0);
-        ctx.arc(x0-radius, y0, radius, 0, Math.PI*2);
+        ctx.strokeStyle = ctx.fillStyle = 'gray';
+        let radius = Math.hypot(x0 - x, y0 - y); 
+        
+        ctx.beginPath();        
+        // ctx.strokeRect(x0 - 0.5, y0 - 0.5, 1, 1);
+        ctx.arc(x0, y0, radius/2, 0, Math.PI*2);
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(x, y);
+        ctx.stroke();
     }
 
     //#endregion Gray Zone
