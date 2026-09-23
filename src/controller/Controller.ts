@@ -7,6 +7,7 @@ import ChargeHandler from "./ChargeHandler.js";
 import Handler from "./Handler.js";
 
 import { getSizeParams, getChargeParams } from "./params.js";
+import Store from "../data/Store.js";
 
 enum CreateMode {
     Info,
@@ -44,7 +45,7 @@ export default class Controller
                 break;
             
         }
-                 
+         
     }
 
     get creationMode() {
@@ -75,6 +76,7 @@ export default class Controller
         //
         this.addEventHandlers();
         this.switchHandlers(this.chargeHandler)
+        this.addDataHandlers();
 
     }
 
@@ -101,7 +103,10 @@ export default class Controller
                     this.setSpaceSize();
                     this.view.draw();
                 }
-            }                
+            }
+            
+            console.log(Store.serialize(this.space));
+
         }); 
 
         // Charge params changed 
@@ -155,6 +160,67 @@ export default class Controller
         //     }
         // }); 
     }
+
+    addDataHandlers() 
+    {
+ 
+        const savedSelect = <HTMLSelectElement>document.getElementById("savedInStore"); 
+        const sceneName = <HTMLInputElement>document.getElementById("sceneName"); 
+
+        fillSavedSelectOptions();
+
+        // Put script to local store
+        //
+        document.getElementById("saveSceneButton")!.addEventListener("click", () => {
+            let key = sceneName.value;
+            const val = Store.serialize(this.space);
+            localStorage.setItem(key, val);
+            fillSavedSelectOptions();
+        });
+
+        // Get script from local store
+        // 
+        savedSelect.addEventListener("change",   () => {
+            let key = savedSelect.selectedOptions[0].value
+            const val = localStorage.getItem(key);
+            if (val) {
+                let space = Store.deserialize(val);
+                if (space) {
+                    this.space.charges = space.charges;
+                    this.space.selectedCharge = space.selectedCharge;
+                    this.view.draw();
+                }
+            }
+        });     
+ 
+        // Remove script from local store
+        //
+        document.getElementById("loadSceneButton")!.addEventListener("click", () => {
+            let key = savedSelect.selectedOptions[0].value
+            const val = localStorage.getItem(key);
+            if (val) {
+                let space = Store.deserialize(val)
+                localStorage.removeItem(key);
+                fillSavedSelectOptions();
+            }
+        });
+
+
+        function fillSavedSelectOptions() {
+            const keys = Object.keys(localStorage);
+            keys.sort();
+            savedSelect.innerHTML = "";
+            // Add options to savedSelect element. One option for every key.
+            keys.forEach((key) => {
+                const option = document.createElement("option");
+                option.value = key;
+                option.textContent = key;
+                savedSelect.appendChild(option);
+            });
+        }
+    }
+
+
 
     step() {
         this.space.step();  
