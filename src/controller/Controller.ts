@@ -25,16 +25,16 @@ export default class Controller
     timer: ReturnType<typeof setInterval> | 0 = 0;
 
     //#region CreateMode
-    private _createMode = CreateMode.Charge;
+    private _creationMode = CreateMode.Charge;
 
-    set createMode(mode: CreateMode) 
+    set creationMode(mode: CreateMode) 
     {
         let charge = document.getElementById("chargeParams")!.style;
         let wire = document.getElementById("wireParams")!.style;
         let magnet = document.getElementById("magnetParams")!.style;
         charge.display = wire.display = magnet.display = "none";
 
-        this._createMode = mode;
+        this._creationMode = mode;
         switch(mode) {
             case CreateMode.Info:
                 break;
@@ -47,8 +47,8 @@ export default class Controller
                  
     }
 
-    get createMode() {
-        return this._createMode;
+    get creationMode() {
+        return this._creationMode;
     }
 
     private switchHandlers(handler: Handler)  {
@@ -57,6 +57,7 @@ export default class Controller
         doc.canvas.onmouseup = (e) => handler.mouseup(e);
         doc.canvas.onkeydown = (e) => handler.keydown(e);
     }
+
     //#endregion CreateMode
 
 
@@ -76,7 +77,8 @@ export default class Controller
         this.switchHandlers(this.chargeHandler)
 
     }
-    setModelSize() {
+
+    setSpaceSize() {
         let [w, h] = [this.space.width, this.space.height];
         document.documentElement.style.setProperty('--canvas-width', w+'px');
         document.documentElement.style.setProperty('--canvas-height', h+'px');            
@@ -96,7 +98,7 @@ export default class Controller
                 const size = getSizeParams();
                 if (size) {
                     [this.space.width, this.space.height] = size;
-                    this.setModelSize();
+                    this.setSpaceSize();
                     this.view.draw();
                 }
             }                
@@ -124,7 +126,7 @@ export default class Controller
         {
             let str = (e.target as HTMLSelectElement).value;
             const key = str as keyof typeof CreateMode;
-            this.createMode = CreateMode[key];            
+            this.creationMode = CreateMode[key];            
         });
 
         // Switch E tension on or off

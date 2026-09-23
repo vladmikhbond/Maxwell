@@ -1,11 +1,8 @@
-// import { dist, } from '../model/Geometry.js'
-// import Bomb from '../model/Bomb.js'
-// import Controller from './Controller.js';
 import { vec2 } from 'gl-matrix';
 import Handler from './Handler.js';
 import { getChargeParams, setChargeParams } from './params.js';
 import Charge from '../models/Charge.js';
-// import { getGasParams } from './params.js';
+
 
 const CLICK_DIST = 3;
 
@@ -52,7 +49,7 @@ export default class ChargeHandler extends Handler {
                 setChargeParams(this.space.selectedCharge);
             }
         } else {
-            // Create new charge & selest it
+            // Create new charge & select it
             let params = getChargeParams();
             if (params) {
                 let [q, vx, vy, m, f] = params;

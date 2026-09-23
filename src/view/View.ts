@@ -2,6 +2,7 @@ import Space from "../models/Space.js";
 import { glo, doc } from "../globals.js"; 
 import { vec2 } from "gl-matrix";
 import Charge from "../models/Charge.js";
+import { getChargeParams } from "../controller/params.js";
 
 export default class View {
     space: Space
@@ -23,14 +24,14 @@ export default class View {
     draw() {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, this.space.width, this.space.height);
+
         // Magnetic field strength
         if (glo.isB) {
             this.drawB();
         }
 
+        // Electric fields of the charges
         for (let ch of this.space.charges) {
-
-            this.drawSign(ch);
 
             // Electric field strength
             if (glo.isE) {
@@ -41,11 +42,14 @@ export default class View {
                     let r = vec2.fromValues(radius * Math.cos(ro), radius * Math.sin(ro));
                     let r1 = vec2.create();
                     vec2.add(r1, r, ch.r);
-                    this.drawLine(r1, ch);
+                    this.drawElectricLine(r1, ch);
                 }
             }
+        }
 
-
+        // Nucleus of the charges and tracks
+        for (let ch of this.space.charges) {
+            this.drawCharge(ch);
             // Track
             if (this.isTrack) {
                 this.ctx2.fillRect(ch.r[0] - 0.5, ch.r[1] - 0.5, 1, 1);
@@ -89,25 +93,32 @@ export default class View {
         
     }
 
-    drawSign(ch: Charge) {
+    drawCharge(ch: Charge) {
         let d = 1;
         if (ch === this.space.selectedCharge) {
             d = 2;
         }
+        const ctx = this.ctx;
+
+        ctx.fillStyle = "white";
+        ctx.beginPath()
+        ctx.arc(ch.r[0], ch.r[1], ch.blindRadius, 0, 2* Math.PI)
+        ctx.fill();
+
         if (ch.q < 0) {
             // minus
-            this.ctx.fillStyle = "blue";
-            this.ctx.fillRect(ch.r[0]-4*d, ch.r[1]-d, 8*d, 2*d); // hor
+            ctx.fillStyle = "blue";
+            ctx.fillRect(ch.r[0]-4*d, ch.r[1]-d, 8*d, 2*d); // hor
         } else {
             // plus
-            this.ctx.fillStyle = "red";
-            this.ctx.fillRect(ch.r[0]-4*d, ch.r[1]-d, 8*d, 2*d); // hor
-            this.ctx.fillRect(ch.r[0]-d, ch.r[1]-4*d, 2*d, 8*d); // ver
+            ctx.fillStyle = "red";
+            ctx.fillRect(ch.r[0]-4*d, ch.r[1]-d, 8*d, 2*d); // hor
+            ctx.fillRect(ch.r[0]-d, ch.r[1]-4*d, 2*d, 8*d); // ver
         }
     }
 
     
-    drawLine(start: vec2, charge: Charge) 
+    drawElectricLine(start: vec2, charge: Charge) 
     {
         let unit = Math.sign(charge.q);
         this.ctx.strokeStyle = charge.q < 0 ? "rgb(0 0 255 / 50%)" : "rgb(255 0 0 / 50%)";
@@ -135,29 +146,18 @@ export default class View {
 
 
     //#region Gray Zone
-
-    // drawGrayRect(x1: number, y1: number, x2: number, y2: number,) {
-    //     const ctx = this.ctx;
-    //     ctx.lineWidth = 1;
-    //     ctx.strokeStyle = ctx.fillStyle = 'gray'; 
-    //     ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
-    //     //
-    //     // let w = (x2 - x1).toFixed(2);
-    //     // let h = (y2 - y1).toFixed(2);
-    //     // let text = x2 - x1 < glo.quant && y2 - y1 < glo.quant ? '██' :  `${w} x ${h}`;
-    //     // ctx.fillText(text, x2, y2);
-    // }
-
     
     drawGrayArc(x0: number, y0: number, x: number, y: number,) {
         const ctx = this.ctx;
         ctx.lineWidth = 1;
         ctx.strokeStyle = ctx.fillStyle = 'gray';
-        let radius = Math.hypot(x0 - x, y0 - y); 
+
+        let params = getChargeParams()!;
+
+        let radius =  Math.sqrt(Math.abs(params[0])) * 5
         
         ctx.beginPath();        
-        // ctx.strokeRect(x0 - 0.5, y0 - 0.5, 1, 1);
-        ctx.arc(x0, y0, radius/2, 0, Math.PI*2);
+        ctx.arc(x0, y0, radius, 0, Math.PI*2);
         ctx.moveTo(x0, y0);
         ctx.lineTo(x, y);
         ctx.stroke();
