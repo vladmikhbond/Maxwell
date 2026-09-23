@@ -5,16 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "pwa-chrome",
+            "type": "chrome",
             "request": "launch",
             "name": "Debug dist/index.html",
             "url": "http://127.0.0.1:5501/",
-            "webRoot": "${workspaceFolder}",
-            "sourceMaps": true,
-            "sourceMapPathOverrides": {
-                "webpack:///./src/*": "${workspaceFolder}/src/*",
-                "../src/*": "${workspaceFolder}/src/*"
-            }
+            "webRoot": "${workspaceFolder}/dist"
         }
     ]
 }

@@ -180,7 +180,7 @@ export default class Controller
 
         // Get script from local store
         // 
-        savedSelect.addEventListener("change",   () => {
+        savedSelect.addEventListener("change",  () => {
             let key = savedSelect.selectedOptions[0].value
             const val = localStorage.getItem(key);
             if (val) {
@@ -196,15 +196,11 @@ export default class Controller
         // Remove script from local store
         //
         document.getElementById("loadSceneButton")!.addEventListener("click", () => {
-            let key = savedSelect.selectedOptions[0].value
-            const val = localStorage.getItem(key);
-            if (val) {
-                let space = Store.deserialize(val)
-                localStorage.removeItem(key);
-                fillSavedSelectOptions();
-            }
+            let key = savedSelect.selectedOptions[0].value;
+            restoreSpace(key);
         });
 
+        // ---------------------- helper funcs -----------------------
 
         function fillSavedSelectOptions() {
             const keys = Object.keys(localStorage);
@@ -217,6 +213,15 @@ export default class Controller
                 option.textContent = key;
                 savedSelect.appendChild(option);
             });
+        }
+
+        function restoreSpace(key: string) {
+            const val = localStorage.getItem(key);
+            if (val) {
+                let space = Store.deserialize(val)
+                localStorage.removeItem(key);
+                fillSavedSelectOptions();
+            }
         }
     }
 
