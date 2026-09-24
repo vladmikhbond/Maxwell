@@ -6,7 +6,7 @@ import ChargeHandler from "./ChargeHandler.js";
 
 import Handler from "./Handler.js";
 
-import { getSizeParams, getChargeParams } from "./params.js";
+import { getInfoParams, getChargeParams } from "./params.js";
 import Store from "../data/Store.js";
 
 enum CreateMode {
@@ -30,14 +30,17 @@ export default class Controller
 
     set creationMode(mode: CreateMode) 
     {
+        let info = document.getElementById("infoParams")!.style;
         let charge = document.getElementById("chargeParams")!.style;
         let wire = document.getElementById("wireParams")!.style;
         let magnet = document.getElementById("magnetParams")!.style;
-        charge.display = wire.display = magnet.display = "none";
+
+        info.display = charge.display = wire.display = magnet.display = "none";
 
         this._creationMode = mode;
         switch(mode) {
             case CreateMode.Info:
+                info.display = "inline";
                 break;
             case CreateMode.Charge:
                 this.switchHandlers(this.chargeHandler);
@@ -63,11 +66,8 @@ export default class Controller
 
 
     // private intervalId = 0;   // base field for timeMode property
-
     // private _mousePos = new Point(0, 0);
     
-
-
     constructor(space: Space, view: View) {
         this.space = space;
         this.view = view;
@@ -93,16 +93,16 @@ export default class Controller
 
     addEventHandlers() 
     {
-        // Size params changed 
-        document.getElementById("sizeParams")!.addEventListener("keydown", (e: KeyboardEvent) => 
+        // Info params changed 
+        document.getElementById("infoParams")!.addEventListener("keydown", (e: KeyboardEvent) => 
         {
             if (e.key == "Enter") {
-                const size = getSizeParams();
-                if (size) {
-                    [this.space.width, this.space.height] = size;
-                    this.setSpaceSize();
-                    this.view.draw();
-                }
+                const params = getInfoParams();
+                this.space.width = params.W;
+                this.space.height = params.H;
+                this.setSpaceSize();
+                this.view.draw();
+
             }
             
             console.log(Store.serialize(this.space));
@@ -116,11 +116,10 @@ export default class Controller
                 const params = getChargeParams();
                 const selCharge = this.space.selectedCharge
                 if (params && selCharge) {
-                    let [q, vx, vy, m, f] = params;
-                    selCharge.v = vec2.fromValues(vx, vy);
-                    selCharge.q = q;
-                    selCharge.m = m;
-                    selCharge.fixed = f == 1;
+                    selCharge.v = vec2.fromValues(params.vx, params.vy);
+                    selCharge.q = params.q;
+                    selCharge.m = params.m;
+                    selCharge.fixed = params.f == 1;
                     this.view.draw();
                 }
             }                
@@ -146,33 +145,25 @@ export default class Controller
            this.view.draw();
         });
 
-
         document.getElementById("runButton")?.addEventListener("click", e => {
             if (this.timer) this.stop(); 
             else this.run();           
         });
 
-        // // do one step
-        // document.addEventListener("keydown", (e: KeyboardEvent) => {
-        //     if (e.key == "1") {
-        //         this.stop();
-        //         this.step();
-        //     }
-        // }); 
     }
 
     addDataHandlers() 
     {
  
         const savedSelect = <HTMLSelectElement>document.getElementById("savedInStore"); 
-        const sceneName = <HTMLInputElement>document.getElementById("sceneName"); 
 
         fillSavedSelectOptions();
 
         // Put script to local store
         //
         document.getElementById("saveSceneButton")!.addEventListener("click", () => {
-            let key = sceneName.value;
+            const params = getInfoParams();
+            let key = params.name;
             const val = Store.serialize(this.space);
             localStorage.setItem(key, val);
             fillSavedSelectOptions();

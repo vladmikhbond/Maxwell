@@ -52,10 +52,9 @@ export default class ChargeHandler extends Handler {
             // Create new charge & select it
             let params = getChargeParams();
             if (params) {
-                let [q, vx, vy, m, f] = params;
-                vx = (x2 - x1) / 10;
-                vy = (y2 - y1) / 10;
-                const newCharge = new Charge(q, x1, y1, vx, vy, m, f==1);
+                let vx = (x2 - x1) / 10;
+                let vy = (y2 - y1) / 10;
+                const newCharge = new Charge(params.q, x1, y1, vx, vy, params.m, params.fixed == 1);
                 this.space.charges.push(newCharge);
                 this.space.selectedCharge = newCharge;
                 setChargeParams(newCharge);

@@ -154,7 +154,7 @@ export default class View {
 
         let params = getChargeParams()!;
 
-        let radius =  Math.sqrt(Math.abs(params[0])) * 5
+        let radius =  Math.sqrt(Math.abs(params.q)) * 5
         
         ctx.beginPath();        
         ctx.arc(x0, y0, radius, 0, Math.PI*2);

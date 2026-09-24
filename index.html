@@ -16,35 +16,33 @@
       </h1>
       <!------------------ top panel ---------------->
       <section>
-          <input id="sizeParams" type="text" value="W=500; H=500">
-          <!-- <input id="spaceParams" type="text" value="k=100; w=0; u=0; v=0; g=0.005"  style="width: 350px;" > -->
+        <select id="createMode" aria-label="Select" required>
+            <option value="Info">Info</option>
+            <option value="Charge" selected >Charge</option>
+            <option value="Wire">Wire</option>
+            <option value="Magnet">Magnet</option>
+        </select>
 
-          <select id="createMode" aria-label="Select" required>
-              <option value="Info">Info</option>
-              <option value="Charge" selected >Charge</option>
-              <option value="Wire">Wire</option>
-              <option value="Magnet">Magnet</option>
-          </select>     
+        <input id="infoParams" type="text" value="W: 500, H: 500, name: 'noname'" style="display: none;">
+        <input id="chargeParams" type="text" value="q: 10, vx: 1, vy: 1, m: 0.1, fixed: 0" style="display: inline;">
+        <input id="wireParams" type="text" value="" style="display: none;">
+        <input id="magnetParams" type="text" value="" style="display: none;">
 
-          <input id="chargeParams" type="text" value="q=10, vx=1, vy=1, m=0.1, f=0" style="display: inline; width: 320px;" title="f - fixed">
-          <input id="wireParams" type="text" value="" style="display: none;">
-          <input id="magnetParams" type="text" value="" style="display: none;">
-
-          <button id="runButton" title="Run | Stop">Run</button>
-          <button id="helpButton" title="Help" class="outline">Help</button>
       </section>
       
       <section> 
-          <label> E
-            <input id="E_Checkbox"  type="checkbox" title=" E-tension" checked> 
-          </label>
-          <label> B
-            <input id="B_Checkbox" type="checkbox" title=" B-tension" checked> 
-          </label>
+        <button id="runButton" title="Run | Stop">Run</button>
+        <button id="helpButton" title="Help" class="outline">Help</button>
 
-          <label> Trace
-            <input id="traceModeCheckbox" type="checkbox" title="trace mode" checked> 
-          </label>           
+        <label> E
+          <input id="E_Checkbox"  type="checkbox" title=" E-tension" checked> 
+        </label>
+        <label> B
+          <input id="B_Checkbox" type="checkbox" title=" B-tension" checked> 
+        </label>
+        <label> Trace
+          <input id="traceModeCheckbox" type="checkbox" title="trace mode" checked> 
+        </label>           
       </section>
 
       <!-- ------------------canvases------------------  -->
@@ -55,10 +53,9 @@
 
       <!-- ------------------bottom panel------------------  -->
       <div class="bottom-panel">
-          <button id="saveSceneButton" class="scene-btn" title="Save script">⬇</button>
-          <select id="savedInStore"></select>
-          <input id="sceneName" style="width: 200px;">
-          <button id="loadSceneButton" class="scene-btn" title="Delete script">⬆</button>
+          <button id="saveSceneButton" class="scene-btn" title="Save script">✔</button>
+          <select id="savedInStore" class="scene-textarea" ></select>
+          <button id="loadSceneButton" class="scene-btn" title="Delete script">❌</button>
       </div>
  
   </div>

@@ -1,9 +1,8 @@
 :root {
     --canvas-width: 500px;
     --canvas-height: 500px;
-    --element-height: 50px;
+    --element-height: 44px;
 }
-
 
 /* <!------------------ top panel ----------------> */
 input[type="text"],
@@ -15,10 +14,16 @@ button {
     height: var(--element-height);
 }
 
-select,
 button {
     background-color: rgb(42, 111, 113);
     padding-top: 8px;
+}
+
+select {
+    background-color: rgb(42, 111, 113);
+    padding: 4px;
+    width: 140px;
+    color: white;
 }
 
 input[type="checkbox"] {
@@ -26,12 +31,9 @@ input[type="checkbox"] {
 }
 
 input[type="text"] {
-    width: 200px;
-}
-
-select {
-    width: 120px;
-    color: white;
+    width: 360px;
+    padding: 10px;
+    text-align: center;
 }
 
 #helpButton {
@@ -82,7 +84,7 @@ section {
 .scene-textarea {
     display: inline; 
     height: var(--element-height);
-    width: calc(var(--canvas-width) - 154px);
+    width: calc(var(--canvas-width) - 156px);
 }
 .scene-btn {
     vertical-align: top; 
