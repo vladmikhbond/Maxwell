@@ -120,20 +120,27 @@ export default class View {
     
     drawElectricLine(start: vec2, charge: Charge) 
     {
-        let unit = Math.sign(charge.q);
-        this.ctx.strokeStyle = charge.q < 0 ? "rgb(0 0 255 / 50%)" : "rgb(255 0 0 / 50%)";
-        this.ctx.beginPath();
+        const MIN_E = 0.5; // мін напруж електричного поля
+        const MAX_E = 50;  // макс напруж електричного поля
         
-        while (vec2.len(this.space.EatR(start)) > 0.5) 
+        const K = 0.1;     // коеф. довжини сегменту ломаної
+        let unit = Math.sign(charge.q) * K;
+
+        // Color - red (+), blue (-) 
+        this.ctx.strokeStyle = charge.q < 0 ? "rgb(0 0 255 / 50%)" : "rgb(255 0 0 / 50%)";
+
+        this.ctx.beginPath();
+        while (vec2.len(this.space.EatR(start)) > MIN_E) 
         {
-            if (vec2.len(this.space.EatR(start)) > 50) break
+            if (vec2.len(this.space.EatR(start)) > MAX_E)
+                break;
 
-            let e = this.space.EatR(start);
-            vec2.len(e)
+            let E = this.space.EatR(start);
+             
+            E = vec2.scale(vec2.create(), E, unit);
 
-            let abs_e = vec2.create(); vec2.scale(abs_e, e, unit);
+            let finish = vec2.add(vec2.create(), start, E);
 
-            let finish = vec2.add(vec2.create(), start, abs_e);
             this.ctx.moveTo(start[0], start[1])
             this.ctx.lineTo(finish[0], finish[1]);
             start = finish;
