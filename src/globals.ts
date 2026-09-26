@@ -14,6 +14,8 @@ export const glo =
 
     isB: true,
     isE: true, 
+    isTracing: true, 
+    
 }
 
 

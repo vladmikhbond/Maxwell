@@ -16,10 +16,6 @@ export default class View {
         this.ctx2 = doc.canvas2.getContext("2d")!;
     }
 
-    get isTrack(): boolean {
-        return (<HTMLInputElement>document.getElementById("traceModeCheckbox")).checked;
-    }
-
 
     draw() {
         const ctx = this.ctx;
@@ -40,7 +36,7 @@ export default class View {
         for (let ch of this.space.charges) {
             this.drawCharge(ch);
             // Track
-            if (this.isTrack) {
+            if (glo.isTracing) {
                 this.ctx2.fillRect(ch.r[0] - 0.5, ch.r[1] - 0.5, 1, 1);
             }
         }
@@ -93,10 +89,9 @@ export default class View {
                     continue;
                 ch.rays[i] = 1;
 
-                let ro = 2 * Math.PI * i / Charge.rayCount;
-                let r = vec2.fromValues(radius * Math.cos(ro), radius * Math.sin(ro));
-                let r1 = vec2.create();
-                vec2.add(r1, r, ch.r);
+                let angle = 2 * Math.PI * i / Charge.rayCount;
+                let r = vec2.fromValues(radius * Math.cos(angle), radius * Math.sin(angle));
+                let r1 = vec2.add(vec2.create(), r, ch.r);
                 this.drawRay(r1, ch);
             }
         }
@@ -133,14 +128,14 @@ export default class View {
     {
         const K = 0.1;     // коеф. довжини сегменту ломаної
 
-        const MIN_E = 0.5; // мін напруж електричного поля
+        const MIN_E = 0.1; // мін напруж електричного поля
         const MAX_E = 50;  // макс напруж електричного поля
         
         
         let unit = Math.sign(charge.q) * K;
 
         // Color
-        this.ctx.strokeStyle =  "rgb(0 0 0 / 50%)" // gray";
+        this.ctx.strokeStyle =  "rgb(0 0 255 / 100%)" // gray";
         let count = 0;      
         this.ctx.beginPath();
 
@@ -159,14 +154,14 @@ export default class View {
                     charge,
                 );
 
-                const angle =  Math.atan2(
-                    nearestCharge.r[1] - start[1],
-                    nearestCharge.r[0] - start[0],
-                ) + Math.PI;
+                // const angle =  Math.atan2(
+                //     nearestCharge.r[1] - start[1],
+                //     nearestCharge.r[0] - start[0],
+                // ) + Math.PI;
 
                 const angle2 = Math.atan2(E[1], E[0]) + Math.PI;
 
-                let i = Math.round(24 * angle2 / 2 / Math.PI) ;
+                let i = Math.round(Charge.rayCount * angle2 / 2 / Math.PI) ;
                 nearestCharge.rays[i] = 1; 
                 // console.log(nearestCharge.r[0], angle )
                 break;

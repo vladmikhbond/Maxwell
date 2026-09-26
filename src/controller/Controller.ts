@@ -3,9 +3,7 @@ import { glo, doc } from "../globals.js";
 import Space from "../models/Space.js";
 import View from "../view/View.js";
 import ChargeHandler from "./ChargeHandler.js";
-
 import Handler from "./Handler.js";
-
 import { getInfoParams, getChargeParams } from "./params.js";
 import Store from "../data/Store.js";
 
@@ -140,6 +138,15 @@ export default class Controller
         document.getElementById("B_Checkbox")?.addEventListener("change", e => {
            glo.isB = (e.target as HTMLInputElement).checked;
            this.view.draw();
+        });
+
+        // Switch tracing on or off
+        document.getElementById("tracingCheckbox")?.addEventListener("change", e => {
+            glo.isTracing = (e.target as HTMLInputElement).checked;
+            if (!glo.isTracing) {
+                this.view.ctx2.clearRect(0, 0, 1111, 1111)
+            }
+            this.view.draw();
         });
 
         document.getElementById("runButton")?.addEventListener("click", e => {
