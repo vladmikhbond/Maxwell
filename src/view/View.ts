@@ -30,13 +30,12 @@ export default class View {
             this.drawB();
         }
 
-        // Electric fields of the charges
+        // Electric field strength of the charges
+        // this.drawE() 
         for (let ch of this.space.charges) {
-
-            // Electric field strength
             if (glo.isE) {
                 let radius = ch.blindRadius;
-                let n = 6 * Math.sqrt(Math.abs(ch.q)) | 0;
+                let n = 24; 
 
                 for (let ro = 0; ro < 2 * Math.PI; ro += Math.PI / n) {
                     let r = vec2.fromValues(radius * Math.cos(ro), radius * Math.sin(ro));
@@ -58,6 +57,8 @@ export default class View {
 
     }
 
+    // Draws magnetic field in the whole space.
+    //
     drawB() {
         const dx = 8;
         const ctx = this.ctx;
@@ -92,7 +93,37 @@ export default class View {
 
         
     }
+    
+    // Draws electric field in the whole space.
+    drawE_1111() {
+        const K = 2
+        const dx = 3;
+        const ctx = this.ctx;
+        ctx.beginPath();
 
+        for (let x = 0; x < this.space.width; x += dx) {
+            for (let y = 0; y < this.space.height; y += dx)  {
+        // for (let i = 0; i < 30000; i++ ) {
+            
+        //     let x = Math.random() * this.space.width;
+        //     let y = Math.random() * this.space.height;
+            
+                let p = vec2.fromValues(x + dx/2, y + dx/2)
+                let E = this.space.EatR(p);
+                if (vec2.len(E) * K < 20) { 
+                    let u = vec2.normalize(vec2.create(), E)
+                    ctx.moveTo(p[0], p[1]);
+                    ctx.lineTo(p[0] + K * E[0], p[1] + K * E[1]);
+                }
+                
+            }
+        }
+        ctx.stroke()
+        
+    }
+    
+    // Draw one charge as a white circle with a sign inside.
+    //
     drawCharge(ch: Charge) {
         let d = 1;
         if (ch === this.space.selectedCharge) {
@@ -120,26 +151,39 @@ export default class View {
     
     drawElectricLine(start: vec2, charge: Charge) 
     {
+        const K = 0.1;     // коеф. довжини сегменту ломаної
+
         const MIN_E = 0.5; // мін напруж електричного поля
         const MAX_E = 50;  // макс напруж електричного поля
         
-        const K = 0.1;     // коеф. довжини сегменту ломаної
+        
         let unit = Math.sign(charge.q) * K;
 
-        // Color - red (+), blue (-) 
-        this.ctx.strokeStyle = charge.q < 0 ? "rgb(0 0 255 / 50%)" : "rgb(255 0 0 / 50%)";
-
+        // Color
+        this.ctx.strokeStyle =  "rgb(0 0 0 / 50%)" // gray";
+        let count = 0;
         this.ctx.beginPath();
-        while (vec2.len(this.space.EatR(start)) > MIN_E) 
+        while (vec2.len(this.space.EatR(start)) > MIN_E && count < 5000) 
         {
-            if (vec2.len(this.space.EatR(start)) > MAX_E)
-                break;
-
-            let E = this.space.EatR(start);
-             
+            count++;
+            let E = this.space.EatR(start);             
             E = vec2.scale(vec2.create(), E, unit);
-
             let finish = vec2.add(vec2.create(), start, E);
+
+            if (vec2.len(this.space.EatR(start)) > MAX_E) {
+                const nearestCharge = this.space.charges.reduce((nearest, candidate) =>
+                    vec2.distance(start, candidate.r) < vec2.distance(start, nearest.r)
+                        ? candidate
+                        : nearest,
+                    charge,
+                );
+                const angle = Math.atan2(
+                    start[1] - nearestCharge.r[1],
+                    start[0] - nearestCharge.r[0],
+                );
+                console.log(nearestCharge.r[0], angle )
+                break;
+            }
 
             this.ctx.moveTo(start[0], start[1])
             this.ctx.lineTo(finish[0], finish[1]);
