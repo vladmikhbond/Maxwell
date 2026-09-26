@@ -29,23 +29,13 @@ export default class View {
         if (glo.isB) {
             this.drawB();
         }
-
-        // Electric field strength of the charges
-        // this.drawE() 
-        for (let ch of this.space.charges) {
-            if (glo.isE) {
-                let radius = ch.blindRadius;
-                let n = 24; 
-
-                for (let ro = 0; ro < 2 * Math.PI; ro += Math.PI / n) {
-                    let r = vec2.fromValues(radius * Math.cos(ro), radius * Math.sin(ro));
-                    let r1 = vec2.create();
-                    vec2.add(r1, r, ch.r);
-                    this.drawElectricLine(r1, ch);
-                }
+        // Electric field strength
+        if (glo.isE) {
+            for (let ch of this.space.charges) {
+                ch.rays.fill(0);
             }
+            this.drawE();
         }
-
         // Nucleus of the charges and tracks
         for (let ch of this.space.charges) {
             this.drawCharge(ch);
@@ -95,31 +85,21 @@ export default class View {
     }
     
     // Draws electric field in the whole space.
-    drawE_1111() {
-        const K = 2
-        const dx = 3;
-        const ctx = this.ctx;
-        ctx.beginPath();
+    drawE() {
+        for (let ch of this.space.charges) {
+            let radius = ch.blindRadius;
+            for (let i = 0; i < Charge.rayCount; i++) {
+                if (ch.rays[i]) 
+                    continue;
+                ch.rays[i] = 1;
 
-        for (let x = 0; x < this.space.width; x += dx) {
-            for (let y = 0; y < this.space.height; y += dx)  {
-        // for (let i = 0; i < 30000; i++ ) {
-            
-        //     let x = Math.random() * this.space.width;
-        //     let y = Math.random() * this.space.height;
-            
-                let p = vec2.fromValues(x + dx/2, y + dx/2)
-                let E = this.space.EatR(p);
-                if (vec2.len(E) * K < 20) { 
-                    let u = vec2.normalize(vec2.create(), E)
-                    ctx.moveTo(p[0], p[1]);
-                    ctx.lineTo(p[0] + K * E[0], p[1] + K * E[1]);
-                }
-                
+                let ro = 2 * Math.PI * i / Charge.rayCount;
+                let r = vec2.fromValues(radius * Math.cos(ro), radius * Math.sin(ro));
+                let r1 = vec2.create();
+                vec2.add(r1, r, ch.r);
+                this.drawRay(r1, ch);
             }
         }
-        ctx.stroke()
-        
     }
     
     // Draw one charge as a white circle with a sign inside.
@@ -149,7 +129,7 @@ export default class View {
     }
 
     
-    drawElectricLine(start: vec2, charge: Charge) 
+    drawRay(start: vec2, charge: Charge) 
     {
         const K = 0.1;     // коеф. довжини сегменту ломаної
 
@@ -161,8 +141,9 @@ export default class View {
 
         // Color
         this.ctx.strokeStyle =  "rgb(0 0 0 / 50%)" // gray";
-        let count = 0;
+        let count = 0;      
         this.ctx.beginPath();
+
         while (vec2.len(this.space.EatR(start)) > MIN_E && count < 5000) 
         {
             count++;
@@ -177,22 +158,26 @@ export default class View {
                         : nearest,
                     charge,
                 );
-                const angle = Math.atan2(
-                    start[1] - nearestCharge.r[1],
-                    start[0] - nearestCharge.r[0],
-                );
-                console.log(nearestCharge.r[0], angle )
+
+                const angle =  Math.atan2(
+                    nearestCharge.r[1] - start[1],
+                    nearestCharge.r[0] - start[0],
+                ) + Math.PI;
+
+                const angle2 = Math.atan2(E[1], E[0]) + Math.PI;
+
+                let i = Math.round(24 * angle2 / 2 / Math.PI) ;
+                nearestCharge.rays[i] = 1; 
+                // console.log(nearestCharge.r[0], angle )
                 break;
             }
-
             this.ctx.moveTo(start[0], start[1])
             this.ctx.lineTo(finish[0], finish[1]);
             start = finish;
 
         } 
-
         this.ctx.stroke();
-        this.ctx.restore(); 
+
     }
 
 

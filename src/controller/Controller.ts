@@ -104,9 +104,6 @@ export default class Controller
                 this.view.draw();
 
             }
-            
-            console.log(Store.serialize(this.space));
-
         }); 
 
         // Charge params changed 
