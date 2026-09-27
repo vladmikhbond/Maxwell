@@ -29,12 +29,17 @@ export default class Controller
 
         //
         this.addEventHandlers();
-        this.switchHandlers(this.chargeHandler)
         this.addDataHandlers();
+
+        // події для отримання первісних значень з елементів UI
+        (document.getElementById("bRange") as HTMLInputElement).dispatchEvent(new Event('change'));
+        (document.getElementById("eRange") as HTMLInputElement).dispatchEvent(new Event('change'));
+        (document.getElementById("createMode") as HTMLInputElement).dispatchEvent(new Event('change'));
     }
 
-    //#region CreateMode
-    private _creationMode = CreateMode.Charge;
+    //#region CreateMode property
+    
+    private _creationMode = CreateMode.Info;
 
     set creationMode(mode: CreateMode) 
     {
@@ -72,13 +77,7 @@ export default class Controller
 
     //#endregion CreateMode
 
-
-    // private intervalId = 0;   // base field for timeMode property
-    // private _mousePos = new Point(0, 0);
-    
-
-
-    setSpaceSize() {
+    changeSpaceSize() {
         let [w, h] = [this.space.width, this.space.height];
         document.documentElement.style.setProperty('--canvas-width', w+'px');
         document.documentElement.style.setProperty('--canvas-height', h+'px');            
@@ -88,23 +87,21 @@ export default class Controller
         doc.canvas2.width = w;
     }
 
-
     addEventHandlers() 
     {
-        // Info params changed 
+        // Info params change 
         document.getElementById("infoParams")!.addEventListener("keydown", (e: KeyboardEvent) => 
         {
             if (e.key == "Enter") {
                 const params = getInfoParams();
                 this.space.width = params.W;
                 this.space.height = params.H;
-                this.setSpaceSize();
+                this.changeSpaceSize();
                 this.view.draw();
-
             }
         }); 
 
-        // Charge params changed 
+        // Charge params change 
         document.getElementById("chargeParams")!.addEventListener("keydown", (e: KeyboardEvent) => 
         {
             if (e.key == "Enter") {
@@ -120,7 +117,7 @@ export default class Controller
             }                
         }); 
 
-        // Change Create Mode
+        // createMode change
         document.getElementById("createMode")!.addEventListener("change", (e: Event) =>
         {
             let str = (e.target as HTMLSelectElement).value;
@@ -130,7 +127,8 @@ export default class Controller
 
 
         // Level of E tension
-        document.getElementById("eRange")?.addEventListener("change", e => {
+        document.getElementById("eRange")?.addEventListener("change", e => 
+        {
             let value = (e.target as HTMLSelectElement).value;
             glo.isE = value !== '2';
 
@@ -141,7 +139,8 @@ export default class Controller
 
 
         // Level of B tension
-        document.getElementById("bRange")?.addEventListener("change", e => {
+        document.getElementById("bRange")?.addEventListener("change", e => 
+        {
             let value = (e.target as HTMLSelectElement).value;
             glo.isB = value !== '0';
 
@@ -151,14 +150,9 @@ export default class Controller
         });
 
 
-        // Switch B tension on or off
-        document.getElementById("B_Checkbox")?.addEventListener("change", e => {
-           glo.isB = (e.target as HTMLInputElement).checked;
-           this.view.draw();
-        });
-
         // Switch tracing on or off
-        document.getElementById("tracingCheckbox")?.addEventListener("change", e => {
+        document.getElementById("tracingCheckbox")?.addEventListener("change", e => 
+        {
             glo.isTracing = (e.target as HTMLInputElement).checked;
             if (!glo.isTracing) {
                 this.view.ctx2.clearRect(0, 0, 1111, 1111)
@@ -166,7 +160,8 @@ export default class Controller
             this.view.draw();
         });
 
-        document.getElementById("runButton")?.addEventListener("click", e => {
+        document.getElementById("runButton")?.addEventListener("click", e => 
+        {
             if (this.timer) this.stop(); 
             else this.run();           
         });
@@ -236,7 +231,6 @@ export default class Controller
             }
         }
     }
-
 
 
     step() {

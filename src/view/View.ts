@@ -10,15 +10,16 @@ export default class View {
     ctx: CanvasRenderingContext2D
     ctx2: CanvasRenderingContext2D
 
-    Bmax: number
-    Emin: number   // мін напруж електричного поля
+    Bmax = 0   // макс напруж магнітного поля
+    Emin = 0   // мін напруж електричного поля
 
     constructor(space: Space) {
         this.space = space;
         this.ctx = doc.canvas.getContext("2d")!;
         this.ctx2 = doc.canvas2.getContext("2d")!; 
-        this.Bmax = +(document.getElementById("bRange") as HTMLInputElement).value;
-        this.Emin = +(document.getElementById("eRange") as HTMLInputElement).value;  
+
+        // this.Bmax = +(document.getElementById("bRange") as HTMLInputElement).value;
+        // this.Emin = +(document.getElementById("eRange") as HTMLInputElement).value;  
 
     }
 
