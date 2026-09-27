@@ -146,7 +146,7 @@ export default class Controller
             glo.isB = value !== '0';
 
             this.view.Bmax = 2**(-value); 
-            document.getElementById("bSpan")!.innerHTML = this.view.Bmax.toExponential(1) ;
+            document.getElementById("bSpan")!.innerHTML = this.view.Bmax.toExponential(0) ;
             this.view.draw();
         });
 
