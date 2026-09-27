@@ -14,7 +14,7 @@
           Maxwell
           <span id="info"> </span> 
       </h1>
-      <!------------------ top panel ---------------->
+      <!------------------ top panel 1 ---------------->
       <section>
         <select id="createMode" aria-label="Select" required>
             <option value="Info">Info</option>
@@ -30,14 +30,16 @@
 
         <button id="runButton" title="Run | Stop">Run</button>
       </section>
-      
-      <section> 
-        <label> E
-          <input id="E_Checkbox"  type="checkbox" title=" E-tension" checked> 
+      <!------------------ top panel 2 ---------------->
+      <section>
+        <label>
+            E <span id="eSpan">1</span>
+            <input id="eRange" type="range" min="0", max="2" step="0.01" value="0.01" title="Electric">
         </label>
-        <label> B
-          <input id="B_Checkbox" type="checkbox" title=" B-tension" checked> 
-        </label>
+        <label>
+            B <span id="bSpan">1</span>
+            <input id="bRange" type="range" min="0", max="20" value="1" title="Magnetic">
+        </label>  
         <label> Trace
           <input id="tracingCheckbox" type="checkbox" title="trace mode" checked> 
         </label>

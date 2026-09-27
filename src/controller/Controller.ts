@@ -20,8 +20,18 @@ export default class Controller
     public space: Space;
     public view: View;
     chargeHandler = new ChargeHandler(this);
-
     timer: ReturnType<typeof setInterval> | 0 = 0;
+
+    constructor(space: Space, view: View) {
+        this.space = space;
+        this.view = view;
+        this.chargeHandler = new ChargeHandler(this);
+
+        //
+        this.addEventHandlers();
+        this.switchHandlers(this.chargeHandler)
+        this.addDataHandlers();
+    }
 
     //#region CreateMode
     private _creationMode = CreateMode.Charge;
@@ -66,17 +76,7 @@ export default class Controller
     // private intervalId = 0;   // base field for timeMode property
     // private _mousePos = new Point(0, 0);
     
-    constructor(space: Space, view: View) {
-        this.space = space;
-        this.view = view;
-        this.chargeHandler = new ChargeHandler(this);
 
-        //
-        this.addEventHandlers();
-        this.switchHandlers(this.chargeHandler)
-        this.addDataHandlers();
-
-    }
 
     setSpaceSize() {
         let [w, h] = [this.space.width, this.space.height];
@@ -128,11 +128,28 @@ export default class Controller
             this.creationMode = CreateMode[key];            
         });
 
-        // Switch E tension on or off
-        document.getElementById("E_Checkbox")?.addEventListener("change", e => {
-           glo.isE = (e.target as HTMLInputElement).checked;
-           this.view.draw();
+
+        // Level of E tension
+        document.getElementById("eRange")?.addEventListener("change", e => {
+            let value = (e.target as HTMLSelectElement).value;
+            glo.isE = value !== '2';
+
+            this.view.Emin = +value; 
+            document.getElementById("eSpan")!.innerHTML = this.view.Emin.toFixed(1) ;
+            this.view.draw();
         });
+
+
+        // Level of B tension
+        document.getElementById("bRange")?.addEventListener("change", e => {
+            let value = (e.target as HTMLSelectElement).value;
+            glo.isB = value !== '0';
+
+            this.view.Bmax = 2**(-value); 
+            document.getElementById("bSpan")!.innerHTML = this.view.Bmax.toExponential(1) ;
+            this.view.draw();
+        });
+
 
         // Switch B tension on or off
         document.getElementById("B_Checkbox")?.addEventListener("change", e => {

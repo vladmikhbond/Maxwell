@@ -10,12 +10,17 @@ export default class View {
     ctx: CanvasRenderingContext2D
     ctx2: CanvasRenderingContext2D
 
+    Bmax: number
+    Emin: number   // мін напруж електричного поля
+
     constructor(space: Space) {
         this.space = space;
         this.ctx = doc.canvas.getContext("2d")!;
-        this.ctx2 = doc.canvas2.getContext("2d")!;
-    }
+        this.ctx2 = doc.canvas2.getContext("2d")!; 
+        this.Bmax = +(document.getElementById("bRange") as HTMLInputElement).value;
+        this.Emin = +(document.getElementById("eRange") as HTMLInputElement).value;  
 
+    }
 
     draw() {
         const ctx = this.ctx;
@@ -27,6 +32,7 @@ export default class View {
         }
         // Electric field strength
         if (glo.isE) {
+            // clear rays
             for (let ch of this.space.charges) {
                 ch.rays.fill(0);
             }
@@ -49,24 +55,12 @@ export default class View {
         const dx = 8;
         const ctx = this.ctx;
 
-        // Bmax
-        let bs = this.space.charges.map(ch => {
-            let p = vec2.fromValues(ch.r[0] - 5, ch.r[1]);
-            return Math.abs(ch.BatR(p));
-        })
- 
-        const Bmax = Math.max(...bs) / 100;
-        // No B at all
-        if (Bmax == 0) {
-            return;
-        }
-
         for (let x = 0; x < this.space.width; x += dx) {
             for (let y = 0; y < this.space.height; y += dx)  {
 
                 let p = vec2.fromValues(x + dx/2, y + dx/2)
                 let B = this.space.BatR(p);
-                let deep = 255 * (1 - Math.abs(B) / Bmax);
+                let deep = 255 * (1 - Math.abs(B) / this.Bmax);
                 if (deep > 255) deep = 255
                 if (B < 0) {
                     ctx.fillStyle = `rgb(${deep} 255 255 / 50%)`;                    
@@ -127,8 +121,6 @@ export default class View {
     drawRay(start: vec2, charge: Charge) 
     {
         const K = 0.1;     // коеф. довжини сегменту ломаної
-
-        const MIN_E = 0.05; // мін напруж електричного поля
         const MAX_E = 50;  // макс напруж електричного поля
         
         
@@ -139,7 +131,7 @@ export default class View {
         let tt = 0;      
         this.ctx.beginPath();
 
-        while (vec2.len(this.space.EatR(start)) > MIN_E && tt < 5000) 
+        while (vec2.len(this.space.EatR(start)) > this.Emin && tt < 5000) 
         {
             tt++;
             let E = this.space.EatR(start);             
