@@ -17,7 +17,7 @@
       <!------------------ top panel ---------------->
       <section>
         <select id="createMode" aria-label="Select" required>
-            <option value="Info">Info</option>
+            <option value="Home">Info</option>
             <option value="Charge" selected >Charge</option>
             <option value="Wire">Wire</option>
             <option value="Magnet">Magnet</option>
@@ -28,12 +28,10 @@
         <input id="wireParams" type="text" value="" style="display: none;">
         <input id="magnetParams" type="text" value="" style="display: none;">
 
+        <button id="runButton" title="Run | Stop">Run</button>
       </section>
       
       <section> 
-        <button id="runButton" title="Run | Stop">Run</button>
-        <button id="helpButton" title="Help" class="outline">Help</button>
-
         <label> E
           <input id="E_Checkbox"  type="checkbox" title=" E-tension" checked> 
         </label>
@@ -42,7 +40,9 @@
         </label>
         <label> Trace
           <input id="tracingCheckbox" type="checkbox" title="trace mode" checked> 
-        </label>           
+        </label>
+        
+        <button id="helpButton" title="Help" class="outline">Help</button>      
       </section>
 
       <!-- ------------------canvases------------------  -->

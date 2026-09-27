@@ -135,7 +135,7 @@ export default class View {
         let unit = Math.sign(charge.q) * K;
 
         // Color
-        this.ctx.strokeStyle =  "rgb(0 0 255 / 100%)" // gray";
+        this.ctx.strokeStyle = "rgb(0 0 255 / 50%)" ;
         let count = 0;      
         this.ctx.beginPath();
 
