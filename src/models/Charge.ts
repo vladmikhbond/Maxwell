@@ -3,13 +3,13 @@ import { glo } from "../globals.js";
 import { cross2 } from "./Space.js"
 
 export default class Charge {
-   static rayCount = 24;
+   
    r: vec2
    v: vec2
    q: number
    m: number 
    fixed: boolean
-   rays: number[] = Array(Charge.rayCount).fill(0)
+   rays: number[] = []
 
    constructor(q: number, x: number, y: number, vx: number, vy: number, m=1, fixed=false) {
       this.r = vec2.fromValues(x, y)
@@ -17,6 +17,13 @@ export default class Charge {
       this.q = q
       this.m = m 
       this.fixed = fixed
+      this.Q = q;
+   }
+
+   set Q(q: number) {
+      this.q = q;
+      let rayCount = (Math.abs(q) * 2) | 0;
+      this.rays = Array(rayCount).fill(0);
    }
 
    // Напруженість електричного поля, яку створює цей заряд в точці r

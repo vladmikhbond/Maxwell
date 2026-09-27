@@ -84,12 +84,12 @@ export default class View {
     drawE() {
         for (let ch of this.space.charges) {
             let radius = ch.blindRadius;
-            for (let i = 0; i < Charge.rayCount; i++) {
+            for (let i = 0; i < ch.rays.length; i++) {
                 if (ch.rays[i]) 
                     continue;
                 ch.rays[i] = 1;
 
-                let angle = 2 * Math.PI * i / Charge.rayCount;
+                let angle = 2 * Math.PI * i / ch.rays.length;
                 let r = vec2.fromValues(radius * Math.cos(angle), radius * Math.sin(angle));
                 let r1 = vec2.add(vec2.create(), r, ch.r);
                 this.drawRay(r1, ch);
@@ -128,7 +128,7 @@ export default class View {
     {
         const K = 0.1;     // коеф. довжини сегменту ломаної
 
-        const MIN_E = 0.1; // мін напруж електричного поля
+        const MIN_E = 0.05; // мін напруж електричного поля
         const MAX_E = 50;  // макс напруж електричного поля
         
         
@@ -136,12 +136,12 @@ export default class View {
 
         // Color
         this.ctx.strokeStyle = "rgb(0 0 255 / 50%)" ;
-        let count = 0;      
+        let tt = 0;      
         this.ctx.beginPath();
 
-        while (vec2.len(this.space.EatR(start)) > MIN_E && count < 5000) 
+        while (vec2.len(this.space.EatR(start)) > MIN_E && tt < 5000) 
         {
-            count++;
+            tt++;
             let E = this.space.EatR(start);             
             E = vec2.scale(vec2.create(), E, unit);
             let finish = vec2.add(vec2.create(), start, E);
@@ -154,16 +154,10 @@ export default class View {
                     charge,
                 );
 
-                // const angle =  Math.atan2(
-                //     nearestCharge.r[1] - start[1],
-                //     nearestCharge.r[0] - start[0],
-                // ) + Math.PI;
+                const angle = Math.atan2(E[1], E[0]) + Math.PI;
 
-                const angle2 = Math.atan2(E[1], E[0]) + Math.PI;
-
-                let i = Math.round(Charge.rayCount * angle2 / 2 / Math.PI) ;
+                let i = Math.round(charge.rays.length * angle / 2 / Math.PI) ;
                 nearestCharge.rays[i] = 1; 
-                // console.log(nearestCharge.r[0], angle )
                 break;
             }
             this.ctx.moveTo(start[0], start[1])
