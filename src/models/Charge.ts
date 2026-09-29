@@ -44,15 +44,23 @@ export default class Charge {
    }
     
    // Напруженість магнітного поля, яку створює рухомий заряд в точці r
-   BatR(r: vec2): number {            
+   BatR(r: vec2): number {
+
+      // нерухомий заряд не створює маг поля
+      if (this.fixed) { 
+         return 0;
+      }      
+
       let diff = vec2.sub(vec2.create(), r, this.r);
-      const diffSquared = vec2.squaredLength(diff);
-      if (diffSquared < 25) {    //TODO
+      const diff_2 = vec2.squaredLength(diff);
+
+      // близько до заряду поля нема 
+      if (diff_2 < 25) {    //TODO
          return 0;
       }      
       let VxD = cross2(this.v, diff); 
       // Bz
-      const Bz = VxD * glo.Kb * this.q / (diffSquared * Math.sqrt(diffSquared));
+      const Bz = VxD * glo.Kb * this.q / (diff_2 * Math.sqrt(diff_2));
       return Bz;
    }
     

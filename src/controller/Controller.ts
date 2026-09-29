@@ -111,7 +111,7 @@ export default class Controller
                     selCharge.v = vec2.fromValues(params.vx, params.vy);
                     selCharge.Q = params.q;
                     selCharge.m = params.m;
-                    selCharge.fixed = params.f == 1;
+                    selCharge.fixed = params.fixed == 1;
                     this.view.draw();
                 }
             }                

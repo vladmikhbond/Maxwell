@@ -16,11 +16,7 @@ export default class View {
     constructor(space: Space) {
         this.space = space;
         this.ctx = doc.canvas.getContext("2d")!;
-        this.ctx2 = doc.canvas2.getContext("2d")!; 
-
-        // this.Bmax = +(document.getElementById("bRange") as HTMLInputElement).value;
-        // this.Emin = +(document.getElementById("eRange") as HTMLInputElement).value;  
-
+        this.ctx2 = doc.canvas2.getContext("2d")!;   
     }
 
     draw() {
@@ -121,11 +117,10 @@ export default class View {
     
     drawRay(start: vec2, charge: Charge) 
     {
-        const K = 0.1;     // коеф. довжини сегменту ломаної
+        const K = 0.5;     // коеф. довжини сегменту ломаної
         const MAX_E = 50;  // макс напруж електричного поля
-        
-        
-        let unit = Math.sign(charge.q) * K;
+         
+        let sign = Math.sign(charge.q);
 
         // Color
         this.ctx.strokeStyle = "rgb(0 0 255 / 50%)" ;
@@ -136,7 +131,9 @@ export default class View {
         {
             tt++;
             let E = this.space.EatR(start);             
-            E = vec2.scale(vec2.create(), E, unit);
+            E = vec2.scale(vec2.create(), E, sign);
+            let len = vec2.length(E)
+            E[0] *= K/len; E[1] *= K/len; 
             let finish = vec2.add(vec2.create(), start, E);
 
             if (vec2.len(this.space.EatR(start)) > MAX_E) {
