@@ -31,7 +31,7 @@ export default class View {
         if (glo.isE) {
             // clear rays
             for (let ch of this.space.charges) {
-                ch.rays.fill(0);
+                ch.rays=new Array(ch.rayCount).fill(0);
             }
             this.drawE();
         }
@@ -75,7 +75,7 @@ export default class View {
     drawE() {
         for (let ch of this.space.charges) {
             let radius = ch.blindRadius;
-            for (let i = 0; i < ch.rays.length; i++) {
+            for (let i = 0; i < ch.rayCount; i++) {
                 if (ch.rays[i]) 
                     continue;
                 ch.rays[i] = 1;
@@ -119,44 +119,48 @@ export default class View {
     {
         const K = 0.5;     // коеф. довжини сегменту ломаної
         const MAX_E = 50;  // макс напруж електричного поля
-        const N_SEG = 500; // макс кількість сегментів лінії поля
+        const N_SEG = 1000; // макс кількість сегментів лінії поля
          
-        let sign = Math.sign(charge.q);
+        const sign = Math.sign(charge.q);
+        const position = vec2.clone(start);
 
         // Color
         this.ctx.strokeStyle = "rgb(0 0 255 / 50%)" ;
         let seg_count = 0;      
         this.ctx.beginPath();
 
-        while (vec2.len(this.space.EatR(start)) > this.Emin && seg_count < N_SEG) 
-        {
+        while (seg_count < N_SEG) {
+            const E = this.space.EatR(position);
+            const magnitude = vec2.length(E);
+            if (!(magnitude > this.Emin)) break;
+
             seg_count++;
-            let E = this.space.EatR(start);             
-            E = vec2.scale(vec2.create(), E, sign);
-            // normalize the length of segment
-            let len = vec2.length(E)
-            E[0] *= K/len; 
-            E[1] *= K/len; 
+            if (magnitude > MAX_E) {
+                let nearestCharge = charge;
+                let nearestDistanceSquared = Infinity;
+                for (const candidate of this.space.charges) {
+                    const dx = position[0] - candidate.r[0];
+                    const dy = position[1] - candidate.r[1];
+                    const distanceSquared = dx * dx + dy * dy;
+                    if (distanceSquared < nearestDistanceSquared) {
+                        nearestDistanceSquared = distanceSquared;
+                        nearestCharge = candidate;
+                    }
+                }
 
-            let finish = vec2.add(vec2.create(), start, E);
-
-            if (vec2.len(this.space.EatR(start)) > MAX_E) {
-                const nearestCharge = this.space.charges.reduce((nearest, candidate) =>
-                    vec2.distance(start, candidate.r) < vec2.distance(start, nearest.r)
-                        ? candidate
-                        : nearest,
-                    charge,
-                );
-
-                const angle = Math.atan2(E[1], E[0]) + Math.PI;
+                const angle = Math.atan2(sign * E[1], sign * E[0]) + Math.PI;
 
                 let i = Math.round(charge.rays.length * angle / 2 / Math.PI) ;
                 nearestCharge.rays[i] = 1; 
                 break;
             }
-            this.ctx.moveTo(start[0], start[1])
-            this.ctx.lineTo(finish[0], finish[1]);
-            start = finish;
+
+            const dx = sign * E[0] * K / magnitude;
+            const dy = sign * E[1] * K / magnitude;
+            this.ctx.moveTo(position[0], position[1]);
+            this.ctx.lineTo(position[0] + dx, position[1] + dy);
+            position[0] += dx;
+            position[1] += dy;
 
         } 
         this.ctx.stroke();
