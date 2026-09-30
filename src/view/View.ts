@@ -119,21 +119,25 @@ export default class View {
     {
         const K = 0.5;     // коеф. довжини сегменту ломаної
         const MAX_E = 50;  // макс напруж електричного поля
+        const N_SEG = 500; // макс кількість сегментів лінії поля
          
         let sign = Math.sign(charge.q);
 
         // Color
         this.ctx.strokeStyle = "rgb(0 0 255 / 50%)" ;
-        let tt = 0;      
+        let seg_count = 0;      
         this.ctx.beginPath();
 
-        while (vec2.len(this.space.EatR(start)) > this.Emin && tt < 5000) 
+        while (vec2.len(this.space.EatR(start)) > this.Emin && seg_count < N_SEG) 
         {
-            tt++;
+            seg_count++;
             let E = this.space.EatR(start);             
             E = vec2.scale(vec2.create(), E, sign);
+            // normalize the length of segment
             let len = vec2.length(E)
-            E[0] *= K/len; E[1] *= K/len; 
+            E[0] *= K/len; 
+            E[1] *= K/len; 
+
             let finish = vec2.add(vec2.create(), start, E);
 
             if (vec2.len(this.space.EatR(start)) > MAX_E) {
