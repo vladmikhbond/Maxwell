@@ -23,15 +23,16 @@ export default class Charge {
 
    set Q(q: number) {
       this.q = q;
-      this.rayCount = (Math.abs(q) * 2) | 0;
+      this.rayCount = (Math.abs(q) * 12) | 0;
       this.rays = Array(this.rayCount).fill(0);
    }
 
    // Напруженість електричного поля, яку створює цей заряд в точці r
-   EatR(r: vec2): vec2 {            
+   EatR(r: vec2): vec2 
+   {            
       let diff = vec2.sub(vec2.create(), r, this.r);
       const diffSquared = vec2.squaredLength(diff);
-      if (diffSquared < 25) {    //TODO
+      if (diffSquared < 5) {    //TODO
          return vec2.create();
       }
       // e

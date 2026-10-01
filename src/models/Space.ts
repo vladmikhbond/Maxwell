@@ -11,6 +11,8 @@ export default class Space
     height = doc.canvas.height;
     width = doc.canvas.width;
     charges: Charge[] = []
+    steadyMagnetic = 0.01
+
 
     selectedCharge: Charge | null = null;
 
@@ -58,10 +60,11 @@ export default class Space
 
     // Підраховує сумарну напруженість магнітного поля Bz в точці r
     BatR(r: vec2): number {
-        let sum = 0;
+        let sum = this.steadyMagnetic;
         for (let ch of this.charges) {
             sum += ch.BatR(r);
         }
+        // console.log(sum)
         return sum;
     }
 

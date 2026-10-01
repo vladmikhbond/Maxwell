@@ -1,8 +1,11 @@
 import Charge from "../models/Charge";
-
+import Space from "../models/Space.js";
 
 const infoParams = (document.getElementById("infoParams") as HTMLInputElement)!;
 const chargeParams = (document.getElementById("chargeParams") as HTMLInputElement)!;
+const wireParams = (document.getElementById("wireParams") as HTMLInputElement)!;
+
+//-----------------------------InfoParams-------------------------------------
 
 export function getInfoParams()
 {
@@ -14,6 +17,8 @@ export function getInfoParams()
         return errMesage("Grammar error", infoParams);
     }
 }
+
+//--------------------------------ChargeParams----------------------------------
 
 export function getChargeParams()
 {
@@ -31,7 +36,25 @@ export function setChargeParams(ch: Charge) {
     chargeParams.value = line;
 }
 
+//-----------------------------WireParams-------------------------------------
 
+export function getWireParams()
+{
+    try {
+        return (new Function("", 
+            `return {${wireParams.value}};`
+        ))();
+    } catch {
+        return errMesage("Grammar error", wireParams);
+    }
+}
+
+export function setWireParams(space: Space) {
+    const line = `sm: ${space.steadyMagnetic}`;
+    chargeParams.value = line;
+}
+
+//------------------------------------------------------------------
 
 function errMesage(mes: string, el: HTMLInputElement) {
     alert (mes);

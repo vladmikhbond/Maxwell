@@ -4,8 +4,9 @@ import Space from "../models/Space.js";
 import View from "../view/View.js";
 import ChargeHandler from "./ChargeHandler.js";
 import Handler from "./Handler.js";
-import { getInfoParams, getChargeParams } from "./params.js";
+import { getInfoParams, getChargeParams, getWireParams } from "./params.js";
 import Store from "../data/Store.js";
+import WireHandler from "./WireHandler.js";
 
 enum CreateMode {
     Info,
@@ -19,13 +20,16 @@ export default class Controller
 
     public space: Space;
     public view: View;
-    chargeHandler = new ChargeHandler(this);
+    chargeHandler: ChargeHandler;
+    wireHandler: WireHandler;
+    
     timer: ReturnType<typeof setInterval> | 0 = 0;
 
     constructor(space: Space, view: View) {
         this.space = space;
         this.view = view;
         this.chargeHandler = new ChargeHandler(this);
+        this.wireHandler = new WireHandler(this);
 
         //
         this.addEventHandlers();
@@ -58,6 +62,10 @@ export default class Controller
             case CreateMode.Charge:
                 this.switchHandlers(this.chargeHandler);
                 charge.display = "inline";
+                break;
+            case CreateMode.Wire:
+                this.switchHandlers(this.wireHandler);
+                wire.display = "inline";
                 break;
             
         }
@@ -112,6 +120,19 @@ export default class Controller
                     selCharge.Q = params.q;
                     selCharge.m = params.m;
                     selCharge.fixed = params.fixed == 1;
+                    this.view.draw();
+                }
+            }                
+        }); 
+
+        // Wire params change 
+        document.getElementById("wireParams")!.addEventListener("keydown", (e: KeyboardEvent) => 
+        {
+            if (e.key == "Enter") {
+                const params = getWireParams();
+                
+                if (params) {
+                    this.space.steadyMagnetic = params.sm;
                     this.view.draw();
                 }
             }                

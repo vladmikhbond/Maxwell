@@ -23,9 +23,9 @@
             <option value="Magnet">Magnet</option>
         </select>
 
-        <input id="infoParams" type="text" value="W: 500, H: 500, name: 'noname'" style="display: none;">
-        <input id="chargeParams" type="text" value="q: 10, vx: 1, vy: 1, m: 0.1, fixed: 0" style="display: inline;">
-        <input id="wireParams" type="text" value="" style="display: none;">
+        <input id="infoParams" type="text" value="W: 500, H: 500, name: '' " style="display: none;">
+        <input id="chargeParams" type="text" value="q: 1, vx: 1, vy: 1, m: 1, fixed: 0" style="display: inline;">
+        <input id="wireParams" type="text" value="sm: 0.01, y: 200, j: 1" style="display: none;">
         <input id="magnetParams" type="text" value="" style="display: none;">
 
         <button id="runButton" title="Run | Stop">Run</button>
@@ -34,7 +34,7 @@
       <section>
         <label>
             E <span id="eSpan"></span>
-            <input id="eRange" type="range" min="0", max="2" step="0.01" value="0.01" title="Electric">
+            <input id="eRange" type="range" min="0", max="0.01" step="0.0001" value="0.0001" title="Electric">
         </label>
         <label>
             B <span id="bSpan"></span>
