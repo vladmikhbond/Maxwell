@@ -8,7 +8,7 @@ export const glo =
     Kb: Kb,     // стала в законі Ампера
     eps0: 1 / (Ke * 4 * Math.PI),  
     miu0: Kb * 4 * Math.PI,        
-
+    C: Ke * Kb,
     SCALE: 1,
     INTERVAL: 10,
     time: 0,      // time in ticks (1 sec = 1000/INTERVAL ticks)

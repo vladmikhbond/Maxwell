@@ -1,6 +1,7 @@
 import { glo, doc } from "../globals.js"; 
 import Charge from "./Charge.js";
 import { vec2 } from 'gl-matrix';
+import Wire from "./Wire.js";
 
 // AxB = Ax*By - Ay*Bx
 export const cross2 = (a: vec2, b: vec2) => a[0] * b[1] - a[1] * b[0];
@@ -11,7 +12,10 @@ export default class Space
     height = doc.canvas.height;
     width = doc.canvas.width;
     charges: Charge[] = []
-    steadyMagnetic = 0.01
+    wires: Wire[] = [new Wire(250, 1)]
+    steadyMagnetic = 0                  // 0.01
+
+
     private electricFieldScratch = vec2.create();
     private chargeFieldScratch = vec2.create();
 
@@ -66,9 +70,17 @@ export default class Space
 
     // Підраховує сумарну напруженість магнітного поля Bz в точці r
     BatR(r: vec2): number {
+        // стала напруга
         let sum = this.steadyMagnetic;
+        
+        // від рухомих зарядів
         for (let ch of this.charges) {
             sum += ch.BatR(r);
+        }
+
+        // від провідників
+        for (let wi of this.wires) {
+            sum += wi.BatR(r);
         }
         // console.log(sum)
         return sum;
