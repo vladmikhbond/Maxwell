@@ -117,7 +117,7 @@ export default class Controller
                 const selCharge = this.space.selectedCharge
                 if (params && selCharge) {
                     selCharge.v = vec2.fromValues(params.vx, params.vy);
-                    selCharge.Q = params.q;
+                    selCharge.q = params.q;
                     selCharge.m = params.m;
                     selCharge.fixed = params.fixed == 1;
                     this.view.draw();

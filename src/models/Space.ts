@@ -22,30 +22,29 @@ export default class Space
         for (let ch of this.charges) {
             if (ch.fixed) 
                 continue;
+
             // acceleration
             let E = this.EatR(ch.r);
             let Bz = this.BatR(ch.r);
-            
+            let q$m = ch.q / ch.m;
+
             // прискор від сили Кулона
-            let accE = vec2.scale(vec2.create(), E,  glo.eps0 * ch.q / ch.m);
+            let accE = vec2.scale(vec2.create(), E,  glo.eps0 * q$m);
             
             // прискор від сили Лоренца
-            let vx = ch.v[0], vy = ch.v[1];
-            let vB = vec2.fromValues(vy * Bz, -vx * Bz) 
-            let accB = vec2.scale(vec2.create(), vB, ch.q / ch.m)
+            let accB = vec2.fromValues(ch.v[1] * Bz * q$m, -ch.v[0] * Bz * q$m);            
 
             // velocity 
             if (glo.isE) {
-                ch.v[0] += accE[0];
-                ch.v[1] += accE[1];
+                vec2.add(ch.v, ch.v, accE);
             }
             if (glo.isB) {
-                ch.v[0] += accB[0];
-                ch.v[1] += accB[1];
+                vec2.add(ch.v, ch.v, accB);
             }
-            
+             
             // coordinates
             vec2.add(ch.r, ch.r, ch.v);
+            
         }
     }
     

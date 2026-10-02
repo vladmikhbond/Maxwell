@@ -9,8 +9,7 @@ export default class Charge {
    q: number
    m: number 
    fixed: boolean
-   rays: number[] = []
-   rayCount = 0
+
 
    constructor(q: number, x: number, y: number, vx: number, vy: number, m=1, fixed=false) {
       this.r = vec2.fromValues(x, y)
@@ -18,14 +17,8 @@ export default class Charge {
       this.q = q
       this.m = m 
       this.fixed = fixed
-      this.Q = q;
    }
 
-   set Q(q: number) {
-      this.q = q;
-      this.rayCount = (Math.abs(q) * 12) | 0;
-      this.rays = Array(this.rayCount).fill(0);
-   }
 
    // Напруженість електричного поля, яку створює цей заряд в точці r
    EatR(r: vec2): vec2 
