@@ -1,6 +1,5 @@
 import { vec2 } from 'gl-matrix';
 import { glo } from "../globals.js";
-import { cross2 } from "./Space.js"
 
 export default class Charge {
    
@@ -21,21 +20,19 @@ export default class Charge {
 
 
    // Напруженість електричного поля, яку створює цей заряд в точці r
-   EatR(r: vec2): vec2 
+   EatR(r: vec2, out: vec2 = vec2.create()): vec2 
    {            
-      let diff = vec2.sub(vec2.create(), r, this.r);
-      const diffSquared = vec2.squaredLength(diff);
+      const dx = r[0] - this.r[0];
+      const dy = r[1] - this.r[1];
+      const diffSquared = dx * dx + dy * dy;
       if (diffSquared < 5) {    //TODO
-         return vec2.create();
+         return vec2.set(out, 0, 0);
       }
       // e
-      const e = vec2.create();
-      vec2.scale(
-            e,
-            diff,
-            glo.Ke * this.q / (diffSquared * Math.sqrt(diffSquared)),
-      );
-      return e;
+      const scale = glo.Ke * this.q / (diffSquared * Math.sqrt(diffSquared));
+      out[0] = dx * scale;
+      out[1] = dy * scale;
+      return out;
    }
     
    // Напруженість магнітного поля, яку створює рухомий заряд в точці r
@@ -46,14 +43,15 @@ export default class Charge {
          return 0;
       }      
 
-      let diff = vec2.sub(vec2.create(), r, this.r);
-      const diff_2 = vec2.squaredLength(diff);
+      const dx = r[0] - this.r[0];
+      const dy = r[1] - this.r[1];
+      const diff_2 = dx * dx + dy * dy;
 
       // близько до заряду поля нема 
       if (diff_2 < 25) {    //TODO
          return 0;
       }      
-      let VxD = cross2(this.v, diff); 
+      const VxD = this.v[0] * dy - this.v[1] * dx;
       // Bz
       const Bz = VxD * glo.Kb * this.q / (diff_2 * Math.sqrt(diff_2));
       return Bz;

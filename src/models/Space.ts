@@ -12,6 +12,8 @@ export default class Space
     width = doc.canvas.width;
     charges: Charge[] = []
     steadyMagnetic = 0.01
+    private electricFieldScratch = vec2.create();
+    private chargeFieldScratch = vec2.create();
 
 
     selectedCharge: Charge | null = null;
@@ -23,23 +25,25 @@ export default class Space
             if (ch.fixed) 
                 continue;
 
-            let E = this.EatR(ch.r);
-            let Bz = this.BatR(ch.r);
-
-            // velocity
-            let q$m = ch.q / ch.m;
+            const q$m = ch.q / ch.m;
 
             if (glo.isE) {
+                const E = this.EatR(ch.r, this.electricFieldScratch);
                 // прискор від сили Кулона
-                let accE = vec2.scale(vec2.create(), E,  glo.eps0 * q$m);
-                vec2.add(ch.v, ch.v, accE);
+                const scale = glo.eps0 * q$m;
+                ch.v[0] += E[0] * scale;
+                ch.v[1] += E[1] * scale;
             }            
  
-
             if (glo.isB) {
+                const Bz = this.BatR(ch.r);
                 // прискор від сили Лоренца
-                let accB = vec2.fromValues(ch.v[1] * Bz * q$m, -ch.v[0] * Bz * q$m);            
-                vec2.add(ch.v, ch.v, accB);
+                const bqm = Bz * q$m;
+                const vx = ch.v[0];
+                const vy = ch.v[1];
+                const k = (1 + bqm * bqm)**-0.5;
+                ch.v[0] = (vx + vy * bqm) * k;
+                ch.v[1] = (vy - vx * bqm) * k;
             }
              
             // coordinates
@@ -49,12 +53,15 @@ export default class Space
     }
     
     // Підраховує сумарну напруженість електричного поля в точці r
-    EatR(r: vec2): vec2 {
-        let sum: vec2 = vec2.fromValues(0, 0);
+    EatR(r: vec2, out: vec2 = vec2.create()): vec2 {
+        out[0] = 0;
+        out[1] = 0;
         for (let c of this.charges) {
-            vec2.add(sum, sum, c.EatR(r));
+            const field = c.EatR(r, this.chargeFieldScratch);
+            out[0] += field[0];
+            out[1] += field[1];
         }
-        return sum;
+        return out;
     }
 
     // Підраховує сумарну напруженість магнітного поля Bz в точці r

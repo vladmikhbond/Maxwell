@@ -255,7 +255,7 @@ export default class Controller
 
 
     step() {
-        this.space.step();  
+        this.space.step();
         this.view.draw();
         glo.time++;   
     }
