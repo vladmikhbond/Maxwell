@@ -1,6 +1,7 @@
 import { doc } from '../globals.js';
 import Charge from '../models/Charge.js';
 import Space from '../models/Space.js';
+import Wire from '../models/Wire.js';
 import View from '../view/View.js';
 import Controller from './Controller.js';
 
@@ -8,7 +9,7 @@ export default class Handler {
     protected currentX = 0;
     protected currentY = 0;
     protected isDrawing = false;
-    protected draggingObject: Charge | null = null;
+    protected draggingObject: Charge| Wire | null = null;
 
 
     view: View;
@@ -42,10 +43,7 @@ export default class Handler {
             this.draggingObject.move(dx, dy);
             this.view.draw();
         } 
-        // else {
-        //     this.view.draw();
-        //     this.view.drawGrayRect(this.currentX, this.currentY, e.offsetX, e.offsetY);
-        // }
+
 
     }
 

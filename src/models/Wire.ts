@@ -23,4 +23,7 @@ export default class Wire {
         return Bz;
     }
     
+    move(dx:number, dy: number) {
+        this.x += dx;
+    }
 }

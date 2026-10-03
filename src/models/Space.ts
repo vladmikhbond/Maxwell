@@ -21,6 +21,7 @@ export default class Space
 
 
     selectedCharge: Charge | null = null;
+    selectedWire: Wire | null = null;
 
     constructor() { }
    
@@ -86,7 +87,7 @@ export default class Space
         return sum;
     }
 
-///// SEL
+// ---------------------- SEL Charge
 
     trySelectCharge(x: number, y: number): boolean {
         this.selectedCharge = null;
@@ -94,7 +95,6 @@ export default class Space
             if (ch.isInside(vec2.fromValues(x, y))) {
                 this.selectedCharge = ch;
                 return true;
-                break;
             }
         }
         return false;
@@ -108,7 +108,26 @@ export default class Space
         this.selectedCharge = null;
     }
 
+// ---------------------- SEL Wire
 
+    trySelectWire(x: number): boolean {
+        this.selectedWire = null;
+        for (let wi of this.wires) {
+            if (Math.abs(wi.x - x) < 3) {
+                this.selectedWire = wi;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    removeSelectedWire() {
+        if (! this.selectedWire)
+            return;
+        let idx = this.wires.indexOf(this.selectedWire);
+        this.wires.splice(idx, 1);
+        this.selectedWire = null;
+    }
 
 
 }

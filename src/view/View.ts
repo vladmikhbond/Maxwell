@@ -5,6 +5,7 @@ import Charge from "../models/Charge.js";
 import { getChargeParams } from "../controller/params.js";
 
 export default class View {
+
     space: Space
 
     ctx: CanvasRenderingContext2D
@@ -166,6 +167,17 @@ export default class View {
         ctx.moveTo(x0, y0);
         ctx.lineTo(x, y);
         ctx.stroke();
+    }
+
+    drawGrayVerLine(x: number) {
+        const ctx = this.ctx;
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = ctx.fillStyle = 'gray';
+
+        ctx.beginPath();        
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, doc.canvas.height);
+        ctx.stroke();        
     }
 
     //#endregion Gray Zone    
