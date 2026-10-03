@@ -3,6 +3,7 @@ import { glo, doc } from "../globals.js";
 import { vec2 } from "gl-matrix";
 import Charge from "../models/Charge.js";
 import { getChargeParams } from "../controller/params.js";
+import Wire from "../models/Wire.js";
 
 export default class View {
 
@@ -32,7 +33,8 @@ export default class View {
         if (glo.isE) {
             this.drawE();
         }
-        // Nucleus of the charges and tracks
+
+        // Nucleus of the charges and the rays
         for (let ch of this.space.charges) {
             this.drawCharge(ch);
             // Track
@@ -41,6 +43,21 @@ export default class View {
             }
         }
 
+        // Wires
+        for (let wi of this.space.wires) {
+            this.drawWire(wi);
+        }
+
+    }
+    drawWire(wire: Wire) {
+        const ctx = this.ctx;
+        ctx.lineWidth = this.space.selectedWire == wire ? 4 : 2;
+        ctx.strokeStyle = 'blue';
+
+        ctx.beginPath();        
+        ctx.moveTo(wire.x, 0);
+        ctx.lineTo(wire.x, doc.canvas.height);
+        ctx.stroke();        
     }
 
     // Draws magnetic field in the whole space.
@@ -52,7 +69,7 @@ export default class View {
         for (let x = 0; x < this.space.width; x += dx) {
             for (let y = 0; y < this.space.height; y += dx)  {
 
-                let p = vec2.fromValues(x + dx/2, y + dx/2)
+                let p = vec2.fromValues(x + dx/2, y + dx/2);
                 let B = this.space.BatR(p);
                 let deep = 255 * (1 - Math.abs(B) / this.Bmax);
                 if (deep > 255) deep = 255
@@ -172,7 +189,7 @@ export default class View {
     drawGrayVerLine(x: number) {
         const ctx = this.ctx;
         ctx.lineWidth = 1;
-        ctx.strokeStyle = ctx.fillStyle = 'gray';
+        ctx.strokeStyle = 'gray';
 
         ctx.beginPath();        
         ctx.moveTo(x, 0);

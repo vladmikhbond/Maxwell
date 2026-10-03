@@ -12,7 +12,7 @@ export default class Space
     height = doc.canvas.height;
     width = doc.canvas.width;
     charges: Charge[] = []
-    wires: Wire[] = [new Wire(250, 1)]
+    wires: Wire[] = []
     steadyMagnetic = 0                  // 0.01
 
 

@@ -51,16 +51,13 @@ export default class WireHandler extends Handler {
                 setWireParams(this.space);
             }
         } else {
-            // Create new charge & select it
+            // Create new wire & select it
             let params = getWireParams();
-            if (params) {
-                // let vx = (x2 - x1) / 10;
-                // let vy = (y2 - y1) / 10;
-                const newWire = new Wire(params.x, params.j);
-                this.space.wires.push(newWire);
-                this.space.selectedWire = newWire;
-                setWireParams(this.space);
-            }
+
+            const newWire = new Wire(x2, params.j);
+            this.space.wires.push(newWire);
+            this.space.selectedWire = newWire;
+            setWireParams(this.space);
         }
         this.view.draw();  
     }
@@ -70,18 +67,16 @@ export default class WireHandler extends Handler {
     {
         super.keydown(e);
         
-        // switch (e.key) {
-        //     case 'Delete':
-        //         if (this.space.selectedCharge) {
-        //             this.space.removeSelectedCharge();
-        //         }
-        //         // } else {
-        //         //     this.space.clearBalls()
-        //         // }
-        //         this.view.draw();
-        //         break;
+        switch (e.key) {
+            case 'Delete':
+                if (this.space.selectedWire) {
+                    this.space.removeSelectedWire();
+                }
 
-        // }
+                this.view.draw();
+                break;
+
+        }
     }
 
 }
