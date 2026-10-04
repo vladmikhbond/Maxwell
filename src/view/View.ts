@@ -49,14 +49,23 @@ export default class View {
         }
 
     }
+
+
     drawWire(wire: Wire) {
+        const T = 50;
+        let J = wire.j < 9 ? wire.j * 5 : T - 5;
+        
         const ctx = this.ctx;
         ctx.lineWidth = this.space.selectedWire == wire ? 4 : 2;
         ctx.strokeStyle = 'blue';
 
-        ctx.beginPath();        
-        ctx.moveTo(wire.x, 0);
-        ctx.lineTo(wire.x, doc.canvas.height);
+        ctx.beginPath();  
+        let y =  -Math.sign(wire.j) * glo.time % T ;
+        while (y < doc.canvas.height) {
+            ctx.moveTo(wire.x, y);
+            ctx.lineTo(wire.x, y + J);
+            y += T;
+        }     
         ctx.stroke();        
     }
 

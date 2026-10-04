@@ -137,13 +137,14 @@ export default class Controller
             if (e.key == "Enter") {
                 const params = getWireParams();
                 const selWire = this.space.selectedWire;
-                
                 if (params && selWire) {
                     selWire.x = params.x;
                     selWire.j = params.j;   
                     this.space.steadyMagnetic = params.sm;
-                    this.view.draw();
                 }
+                // steady magnetic                
+                this.space.steadyMagnetic = params.sm;
+                this.view.draw();
             }                
         }); 
 

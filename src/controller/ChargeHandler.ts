@@ -73,35 +73,8 @@ export default class ChargeHandler extends Handler {
                 if (this.space.selectedCharge) {
                     this.space.removeSelectedCharge();
                 }
-                // } else {
-                //     this.space.clearBalls()
-                // }
                 this.view.draw();
                 break;
-            // case 'ArrowUp':
-            //     if (this.space.selectedBall) {
-            //         this.space.selectedBall.y -= 1;
-            //         this.view.draw();
-            //     }
-            //     break;
-            // case 'ArrowDown':
-            //     if (this.space.selectedBall) {
-            //         this.space.selectedBall.y += 1;
-            //         this.view.draw();
-            //     }
-            //     break;
-            // case 'ArrowLeft':
-            //     if (this.space.selectedBall) {
-            //         this.space.selectedBall.x -= 1;
-            //         this.view.draw();
-            //     }
-            //     break;
-            // case 'ArrowRight':
-            //     if (this.space.selectedBall) {
-            //         this.space.selectedBall.x += 1;
-            //         this.view.draw();
-            //     }
-            //     break;
         }
     }
 
