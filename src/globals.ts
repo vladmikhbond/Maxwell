@@ -10,7 +10,7 @@ export const glo =
     miu0: Kb * 4 * Math.PI,        
     C: Ke * Kb,
     SCALE: 1,
-    INTERVAL: 10,
+    INTERVAL: 50,
     time: 0,      // time in ticks (1 sec = 1000/INTERVAL ticks)
 
     isB: true,

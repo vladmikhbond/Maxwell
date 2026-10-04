@@ -50,7 +50,7 @@ export function getWireParams()
 }
 
 export function setWireParams(wire: Wire) {
-    wireParams.value = `, x: ${wire.x}, j: ${wire.j}`;
+    wireParams.value = `x: ${wire.x}, j: ${wire.j}`;
 }
 
 

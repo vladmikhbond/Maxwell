@@ -54,7 +54,7 @@ export default class View {
     drawWire(wire: Wire) {
         const T = 50;
         let J = wire.j < 9 ? wire.j * 5 : T - 5;
-        
+
         const ctx = this.ctx;
         ctx.lineWidth = this.space.selectedWire == wire ? 4 : 2;
         ctx.strokeStyle = 'blue';
@@ -205,6 +205,6 @@ export default class View {
 
 function rayCount(ch: Charge) {
     const RAYS = 12;
-    return Math.abs(RAYS * ch.q**0.5 ) | 0;
+    return RAYS * Math.abs(ch.q)**0.5 | 0;
 }
 

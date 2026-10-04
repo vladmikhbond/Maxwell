@@ -1,5 +1,3 @@
-
-
 info under cursor 
 
 E slider

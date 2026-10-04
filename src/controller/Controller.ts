@@ -43,6 +43,7 @@ export default class Controller
         (document.getElementById("bRange") as HTMLInputElement).dispatchEvent(new Event('change'));
         (document.getElementById("eRange") as HTMLInputElement).dispatchEvent(new Event('change'));
         (document.getElementById("createMode") as HTMLInputElement).dispatchEvent(new Event('change'));
+        (document.getElementById("saveSceneButton") as HTMLInputElement).dispatchEvent(new Event('click'));
     }
 
     //#region CreateMode property
@@ -140,10 +141,7 @@ export default class Controller
                 if (params && selWire) {
                     selWire.x = params.x;
                     selWire.j = params.j;   
-                    this.space.steadyMagnetic = params.sm;
                 }
-                // steady magnetic                
-                this.space.steadyMagnetic = params.sm;
                 this.view.draw();
             }                
         }); 
@@ -224,8 +222,7 @@ export default class Controller
             if (val) {
                 let space = Store.deserialize(val);
                 if (space) {
-                    this.space.charges = space.charges;
-                    this.space.selectedCharge = space.selectedCharge;
+                    Object.assign(this.space, space); 
                     this.view.draw();
                 }
             }
