@@ -59,7 +59,7 @@ export default class Charge {
     
 
    get blindRadius() {
-      const K = 5;
+      const K = 1;
       return Math.sqrt(Math.abs(this.q)) * K;
    }
 

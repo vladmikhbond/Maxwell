@@ -7,6 +7,7 @@ import Handler from "./Handler.js";
 import { getInfoParams, getChargeParams, getWireParams } from "./params.js";
 import Store from "../data/Store.js";
 import WireHandler from "./WireHandler.js";
+import InfoHandler from "./InfoHandler.js";
 
 enum CreateMode {
     Info,
@@ -23,7 +24,7 @@ export default class Controller
     public view: View;
     chargeHandler: ChargeHandler;
     wireHandler: WireHandler;
-    infoHandler: Handler;
+    infoHandler: InfoHandler;
     
     
     timer: ReturnType<typeof setInterval> | 0 = 0;

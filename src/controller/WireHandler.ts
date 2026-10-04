@@ -1,7 +1,5 @@
-// import { vec2 } from 'gl-matrix';
 import Handler from './Handler.js';
 import { getWireParams, setWireParams } from './params.js';
-import Charge from '../models/Charge.js';
 import Wire from '../models/Wire.js';
 
 

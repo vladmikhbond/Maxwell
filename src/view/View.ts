@@ -204,7 +204,7 @@ export default class View {
 
 
 function rayCount(ch: Charge) {
-    const RAYS = 12;
+    const RAYS = 5;
     return RAYS * Math.abs(ch.q)**0.5 | 0;
 }
 
