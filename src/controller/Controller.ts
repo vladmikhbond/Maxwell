@@ -12,7 +12,7 @@ enum CreateMode {
     Info,
     Charge,
     Wire,
-    Magnet
+    // Magnet
 }
 
 
@@ -24,6 +24,8 @@ export default class Controller
     public view: View;
     chargeHandler: ChargeHandler;
     wireHandler: WireHandler;
+    infoHandler: Handler;
+    
     
     timer: ReturnType<typeof setInterval> | 0 = 0;
 
@@ -32,6 +34,7 @@ export default class Controller
         this.view = view;
         this.chargeHandler = new ChargeHandler(this);
         this.wireHandler = new WireHandler(this);
+        this.infoHandler = new Handler(this);
 
         //
         this.addEventHandlers();
@@ -59,6 +62,7 @@ export default class Controller
         this._creationMode = mode;
         switch(mode) {
             case CreateMode.Info:
+                this.switchHandlers(this.infoHandler);
                 infoParams.display = "inline";
                 break;
             case CreateMode.Charge:

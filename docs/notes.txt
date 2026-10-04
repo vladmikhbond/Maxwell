@@ -1,4 +1,5 @@
-очистка
+draw wires
 
+info under cursor 
 
-силові лінії з постійнною довжиною сегментів
+E slider
