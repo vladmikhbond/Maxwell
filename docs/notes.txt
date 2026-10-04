@@ -1,5 +1,7 @@
-sm -> Info mode
+
 
 info under cursor 
 
 E slider
+
+help

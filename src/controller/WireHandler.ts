@@ -47,7 +47,7 @@ export default class WireHandler extends Handler {
         if (drawDist <= CLICK_DIST) {
             // Try to select wire
             if (this.space.trySelectWire(x1)) {
-                setWireParams(this.space);
+                setWireParams(this.space.selectedWire!);
             }
         } else {
             // Create new wire & select it
@@ -56,7 +56,7 @@ export default class WireHandler extends Handler {
             const newWire = new Wire(x2, params.j);
             this.space.wires.push(newWire);
             this.space.selectedWire = newWire;
-            setWireParams(this.space);
+            setWireParams(this.space.selectedWire);
         }
         this.view.draw();  
     }

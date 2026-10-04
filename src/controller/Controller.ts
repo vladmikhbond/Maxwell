@@ -12,7 +12,6 @@ enum CreateMode {
     Info,
     Charge,
     Wire,
-    // Magnet
 }
 
 
@@ -110,6 +109,7 @@ export default class Controller
                 const params = getInfoParams();
                 this.space.width = params.W;
                 this.space.height = params.H;
+                this.space.steadyMagnetic = params.sm;
                 this.changeSpaceSize();
                 this.view.draw();
             }

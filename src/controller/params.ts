@@ -1,5 +1,5 @@
 import Charge from "../models/Charge";
-import Space from "../models/Space.js";
+import Wire from "../models/Wire";
 
 const infoParams = (document.getElementById("infoParams") as HTMLInputElement)!;
 const chargeParams = (document.getElementById("chargeParams") as HTMLInputElement)!;
@@ -49,14 +49,10 @@ export function getWireParams()
     }
 }
 
-export function setWireParams(space: Space) {
-    let line = `sm: ${space.steadyMagnetic}`;
-    const wire = space.selectedWire;
-    if (wire) {
-        line += `, x: ${wire.x}, j: ${wire.j}`;
-    }
-    wireParams.value = line;
+export function setWireParams(wire: Wire) {
+    wireParams.value = `, x: ${wire.x}, j: ${wire.j}`;
 }
+
 
 //------------------------------------------------------------------
 
