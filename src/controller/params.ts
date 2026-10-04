@@ -53,9 +53,9 @@ export function setWireParams(space: Space) {
     let line = `sm: ${space.steadyMagnetic}`;
     const wire = space.selectedWire;
     if (wire) {
-        line += `x: ${wire.x}, j: ${wire.j}`;
+        line += `, x: ${wire.x}, j: ${wire.j}`;
     }
-    chargeParams.value = line;
+    wireParams.value = line;
 }
 
 //------------------------------------------------------------------

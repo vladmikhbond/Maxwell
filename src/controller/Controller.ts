@@ -15,6 +15,8 @@ enum CreateMode {
     Magnet
 }
 
+
+
 export default class Controller 
 {
 
@@ -47,25 +49,25 @@ export default class Controller
 
     set creationMode(mode: CreateMode) 
     {
-        let info = document.getElementById("infoParams")!.style;
-        let charge = document.getElementById("chargeParams")!.style;
-        let wire = document.getElementById("wireParams")!.style;
-        let magnet = document.getElementById("magnetParams")!.style;
+        let infoParams = document.getElementById("infoParams")!.style;
+        let chargeParams = document.getElementById("chargeParams")!.style;
+        let wireParams = document.getElementById("wireParams")!.style;
+        let magnetParams = document.getElementById("magnetParams")!.style;
 
-        info.display = charge.display = wire.display = magnet.display = "none";
+        infoParams.display = chargeParams.display = wireParams.display = magnetParams.display = "none";
 
         this._creationMode = mode;
         switch(mode) {
             case CreateMode.Info:
-                info.display = "inline";
+                infoParams.display = "inline";
                 break;
             case CreateMode.Charge:
                 this.switchHandlers(this.chargeHandler);
-                charge.display = "inline";
+                chargeParams.display = "inline";
                 break;
             case CreateMode.Wire:
                 this.switchHandlers(this.wireHandler);
-                wire.display = "inline";
+                wireParams.display = "inline";
                 break;
             
         }
@@ -114,7 +116,7 @@ export default class Controller
         {
             if (e.key == "Enter") {
                 const params = getChargeParams();
-                const selCharge = this.space.selectedCharge
+                const selCharge = this.space.selectedCharge;
                 if (params && selCharge) {
                     selCharge.v = vec2.fromValues(params.vx, params.vy);
                     selCharge.q = params.q;
@@ -130,8 +132,11 @@ export default class Controller
         {
             if (e.key == "Enter") {
                 const params = getWireParams();
+                const selWire = this.space.selectedWire;
                 
-                if (params) {
+                if (params && selWire) {
+                    selWire.x = params.x;
+                    selWire.j = params.j;   
                     this.space.steadyMagnetic = params.sm;
                     this.view.draw();
                 }
@@ -253,11 +258,15 @@ export default class Controller
         }
     }
 
-
+ 
     step() {
         this.space.step();
         this.view.draw();
-        glo.time++;   
+        glo.time++; 
+        //
+        if (glo.time % 10 ==0) {
+            doc.info.innerHTML = glo.time.toString();
+        }
     }
 
     

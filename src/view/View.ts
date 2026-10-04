@@ -87,6 +87,10 @@ export default class View {
     
     // Draws electric field in the whole space.
     drawE() {
+        // Color
+        this.ctx.strokeStyle = "rgb(0 0 255 / 50%)" ;
+        this.ctx.lineWidth = 1;
+        this.ctx.beginPath();
         for (let ch of this.space.charges) {
             let radius = ch.blindRadius;
             let n = rayCount(ch);
@@ -97,6 +101,7 @@ export default class View {
                 this.drawRay(start, ch);
             }
         }
+        this.ctx.stroke();
     }
     
     // Draw one charge as a white circle with a sign inside.
@@ -116,12 +121,12 @@ export default class View {
         if (ch.q < 0) {
             // minus
             ctx.fillStyle = "blue";
-            ctx.fillRect(ch.r[0]-4*d, ch.r[1]-d, 8*d, 2*d); // hor
+            ctx.fillRect(ch.r[0]-4*d, ch.r[1]-d, 8*d, 2*d); // -
         } else {
             // plus
             ctx.fillStyle = "red";
-            ctx.fillRect(ch.r[0]-4*d, ch.r[1]-d, 8*d, 2*d); // hor
-            ctx.fillRect(ch.r[0]-d, ch.r[1]-4*d, 2*d, 8*d); // ver
+            ctx.fillRect(ch.r[0]-4*d, ch.r[1]-d, 8*d, 2*d); // -
+            ctx.fillRect(ch.r[0]-d, ch.r[1]-4*d, 2*d, 8*d); // |
         }
     }
 
@@ -129,26 +134,18 @@ export default class View {
     drawRay(start: vec2, charge: Charge) 
     {
         const K = 0.5;     // коеф. довжини сегменту ломаної
-        const MAX_E = 0.05;  // макс напруж електричного поля
         const N_SEG = 1000; // макс кількість сегментів лінії поля
          
         const sign =  Math.sign(charge.q);
         const position = vec2.clone(start);
 
-        // Color
-        this.ctx.strokeStyle = "rgb(0 0 255 / 50%)" ;
         let seg_count = 0;
-
-        this.ctx.beginPath();
         while (seg_count < N_SEG) {
             const E = this.space.EatR(position);
             const magnitude = vec2.length(E);
-
             if (magnitude < this.Emin)
                 break;
-
             seg_count++;
-    
             // continue to draw the ray  
             const dx = sign * E[0] * K / magnitude;
             const dy = sign * E[1] * K / magnitude;
@@ -160,11 +157,7 @@ export default class View {
             const magnitude1 = vec2.length(this.space.EatR(position));
             if (magnitude1 > magnitude)
                 break;
-
-
         } 
-        this.ctx.stroke();
-
     }
 
 
@@ -202,7 +195,7 @@ export default class View {
 
 
 function rayCount(ch: Charge) {
-    const RAY_COUNT = 12;
-    return Math.abs(ch.q * RAY_COUNT) | 0;
+    const RAYS = 12;
+    return Math.abs(RAYS * ch.q**0.5 ) | 0;
 }
 

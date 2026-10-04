@@ -46,8 +46,7 @@ export default class WireHandler extends Handler {
         // just mouse click
         if (drawDist <= CLICK_DIST) {
             // Try to select wire
-            this.space.trySelectWire(x1);
-            if (this.space.selectedWire) {
+            if (this.space.trySelectWire(x1)) {
                 setWireParams(this.space);
             }
         } else {
