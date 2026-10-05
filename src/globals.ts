@@ -1,5 +1,5 @@
-const Ke = 1;
-const Kb = 1;
+const Ke = 1000;
+const Kb = 0.01;
 
 
 export const glo = 

@@ -1,58 +1,24 @@
-
+import { vec2 } from 'gl-matrix';
 import Handler from './Handler.js';
 
 export default class InfoHandler extends Handler {
    
     mousedown(e: MouseEvent) {
-        super.mousedown(e);
-        // // якщо курсор в середені обраного заряду, таскати його
-        // let sel = this.space.selectedWire;
-        // if (sel && Math.abs(sel.x - e.offsetX) < 3) {
-        //     this.draggingObject = sel;
-        // }          
+        super.mousedown(e);          
     }
 
     mousemove(e: MouseEvent) {
         super.mousemove(e);
-        // if (!this.isDrawing) 
-        //     return;
-
-        // this.view.draw();
-        // this.view.drawGrayVerLine(e.offsetX);
+        let r = vec2.fromValues(e.offsetX, e.offsetY)
+        let E = this.space.EatR(r);
+        let b = this.space.BatR(r);
+        let s = `Ex = ${E[0].toFixed(2)}, Ey = ${E[1].toFixed(2)}, Bz = ${b.toFixed(2)}`;
+        (<HTMLSpanElement>document.getElementById("info")).innerHTML = s;
         
     }
 
     mouseup(e: MouseEvent) {
-        if (!this.isDrawing) 
-            return;
-
-        // this.isDrawing = false;
-        
-        // if (this.draggingObject) {
-        //     this.draggingObject = null;
-        //     return;
-        // }   
-
-        // let x1 = this.currentX, y1 = this.currentY;
-        // let x2 = e.offsetX, y2 = e.offsetY;
-        // let drawDist = Math.hypot(x2 - x1, y2 - y1);
-
-        // // just mouse click
-        // if (drawDist <= CLICK_DIST) {
-        //     // Try to select wire
-        //     if (this.space.trySelectWire(x1)) {
-        //         setWireParams(this.space.selectedWire!);
-        //     }
-        // } else {
-        //     // Create new wire & select it
-        //     let params = getWireParams();
-
-        //     const newWire = new Wire(x2, params.j);
-        //     this.space.wires.push(newWire);
-        //     this.space.selectedWire = newWire;
-        //     setWireParams(this.space.selectedWire);
-        // }
-        // this.view.draw();  
+        super.mouseup(e);
     }
 
 
@@ -60,16 +26,6 @@ export default class InfoHandler extends Handler {
     {
         super.keydown(e);
         
-        // switch (e.key) {
-        //     case 'Delete':
-        //         if (this.space.selectedWire) {
-        //             this.space.removeSelectedWire();
-        //         }
-
-        //         this.view.draw();
-        //         break;
-
-        // }
     }
 
 }

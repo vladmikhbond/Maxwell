@@ -46,9 +46,9 @@ export default class Space
                 const bqm = Bz * q$m;
                 const vx = ch.v[0];
                 const vy = ch.v[1];
-                const k = (1 + bqm * bqm)**-0.5;
-                ch.v[0] = (vx + vy * bqm) * k;
-                ch.v[1] = (vy - vx * bqm) * k;
+                const k = Math.sqrt(1 + bqm * bqm);
+                ch.v[0] = (vx + vy * bqm) / k;
+                ch.v[1] = (vy - vx * bqm) / k;
             }
              
             // coordinates

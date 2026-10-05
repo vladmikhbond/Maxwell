@@ -34,7 +34,7 @@ export default class Controller
         this.view = view;
         this.chargeHandler = new ChargeHandler(this);
         this.wireHandler = new WireHandler(this);
-        this.infoHandler = new Handler(this);
+        this.infoHandler = new InfoHandler(this);
 
         //
         this.addEventHandlers();

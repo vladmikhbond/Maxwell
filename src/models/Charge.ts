@@ -48,7 +48,7 @@ export default class Charge {
       const diff_2 = dx * dx + dy * dy;
 
       // близько до заряду поля нема 
-      if (diff_2 < 25) {    //TODO
+      if (diff_2 < 5) {    //TODO
          return 0;
       }      
       const VxD = this.v[0] * dy - this.v[1] * dx;
