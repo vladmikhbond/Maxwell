@@ -1,5 +1,6 @@
 import { vec2 } from 'gl-matrix';
 import Handler from './Handler.js';
+import { doc } from '../globals.js';
 
 export default class InfoHandler extends Handler {
    
@@ -12,9 +13,7 @@ export default class InfoHandler extends Handler {
         let r = vec2.fromValues(e.offsetX, e.offsetY)
         let E = this.space.EatR(r);
         let b = this.space.BatR(r);
-        let s = `Ex = ${E[0].toFixed(2)}, Ey = ${E[1].toFixed(2)}, Bz = ${b.toFixed(2)}`;
-        (<HTMLSpanElement>document.getElementById("info")).innerHTML = s;
-        
+        doc.info.innerHTML = `Ex = ${E[0].toFixed(2)}, Ey = ${E[1].toFixed(2)}, Bz = ${b.toFixed(2)}`;     
     }
 
     mouseup(e: MouseEvent) {

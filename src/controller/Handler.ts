@@ -5,6 +5,8 @@ import Wire from '../models/Wire.js';
 import View from '../view/View.js';
 import Controller from './Controller.js';
 
+const select = <HTMLSelectElement>document.getElementById('createMode');
+
 export default class Handler {
     protected currentX = 0;
     protected currentY = 0;
@@ -55,6 +57,18 @@ export default class Handler {
             case '1':
                 this.controller.stop();            
                 this.controller.step();
+                break;
+            case 'i': case 'I':
+                select.value = 'Info';
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+                break;
+            case 'c': case 'C':
+                select.value = 'Charge';
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+                break;
+            case 'w': case 'W':
+                select.value = 'Wire';
+                select.dispatchEvent(new Event('change', { bubbles: true }));
                 break;
 
         }
