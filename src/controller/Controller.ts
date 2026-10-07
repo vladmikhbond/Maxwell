@@ -185,7 +185,7 @@ export default class Controller
         {
             glo.isTracing = (e.target as HTMLInputElement).checked;
             if (!glo.isTracing) {
-                this.view.ctx2.clearRect(0, 0, 1111, 1111)
+                this.view.ctx2.clearRect(0, 0, doc.canvas2.width, doc.canvas2.height);
             }
             this.view.draw();
         });
@@ -285,7 +285,7 @@ export default class Controller
             return;
         this.timer = setInterval(() => { 
             this.step();
-        }, glo.INTERVAL);
+        }, glo.TIME_INTERVAL);
     }
 
 }

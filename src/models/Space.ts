@@ -31,13 +31,13 @@ export default class Space
                 continue;
 
             const q$m = ch.q / ch.m;
+            const eps$q$m = glo.eps0 * q$m;
 
             if (glo.isE) {
                 const E = this.EatR(ch.r, this.electricFieldScratch);
-                // прискор від сили Кулона
-                const scale = glo.eps0 * q$m;
-                ch.v[0] += E[0] * scale;
-                ch.v[1] += E[1] * scale;
+                // прискор від сили Кулона;
+                ch.v[0] += E[0] * eps$q$m;
+                ch.v[1] += E[1] * eps$q$m;
             }            
  
             if (glo.isB) {

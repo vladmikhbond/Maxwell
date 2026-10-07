@@ -5,6 +5,9 @@ import Charge from "../models/Charge.js";
 import { getChargeParams } from "../controller/params.js";
 import Wire from "../models/Wire.js";
 
+// Кількість ліній з одиничного заряду
+const RAYS = 6;
+
 export default class View {
 
     space: Space
@@ -12,8 +15,8 @@ export default class View {
     ctx: CanvasRenderingContext2D
     ctx2: CanvasRenderingContext2D
 
-    Bmax = 0   // макс напруж магнітного поля
-    Emin = 0   // мін напруж електричного поля
+    Bmax = 0   // макс напруж магнітного поля (встановлюється слайдером)
+    Emin = 0   // мін напруж електричного поля (встановлюється слайдером)
 
     constructor(space: Space) {
         this.space = space;
@@ -53,17 +56,17 @@ export default class View {
 
     drawWire(wire: Wire) {
         const ctx = this.ctx;
-        ctx.lineWidth = this.space.selectedWire == wire ? 4 : 2;
+        ctx.lineWidth = this.space.selectedWire == wire ? 6 : 3;
 
         //
-        ctx.strokeStyle = 'pink';
+        ctx.strokeStyle = 'green';
         ctx.beginPath();  
         ctx.moveTo(wire.x, 0);
         ctx.lineTo(wire.x, doc.canvas.height);
         ctx.stroke();            
-        //
+        // anime
         const T = 50;
-        let J = wire.j < 9 ? wire.j * 5 : T - 5;
+        let J = 25
         ctx.strokeStyle = 'blue';
         ctx.beginPath();  
         let y =  -Math.sign(wire.j) * glo.time % T ;
@@ -210,7 +213,6 @@ export default class View {
 
 
 function rayCount(ch: Charge) {
-    const RAYS = 5;
     return RAYS * Math.abs(ch.q)**0.5 | 0;
 }
 

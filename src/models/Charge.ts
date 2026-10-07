@@ -45,22 +45,22 @@ export default class Charge {
 
       const dx = r[0] - this.r[0];
       const dy = r[1] - this.r[1];
-      const diff_2 = dx * dx + dy * dy;
+      const dist_square = dx * dx + dy * dy;
 
-      // близько до заряду поля нема 
-      if (diff_2 < 5) {    //TODO
+      // близько до заряду поля нема (щоб не було сінгулярності)
+      if (dist_square < 4) { 
          return 0;
       }      
       const VxD = this.v[0] * dy - this.v[1] * dx;
       // Bz
-      const Bz = VxD * glo.Kb * this.q / (diff_2 * Math.sqrt(diff_2));
+      const Bz = VxD * glo.Kb * this.q / (dist_square * Math.sqrt(dist_square));
       return Bz;
    }
     
 
    get blindRadius() {
-      const K = 1;
-      return Math.sqrt(Math.abs(this.q)) * K;
+      const K = 4;
+      return Math.abs(this.q)**0.25 * K;
    }
 
    isInside(r: vec2) {
