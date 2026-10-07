@@ -13,7 +13,7 @@ export default class View {
     space: Space
 
     ctx: CanvasRenderingContext2D
-    ctx2: CanvasRenderingContext2D
+    ctx2: CanvasRenderingContext2D  // лише траси
 
     Bmax = 0   // макс напруж магнітного поля (встановлюється слайдером)
     Emin = 0   // мін напруж електричного поля (встановлюється слайдером)
@@ -22,6 +22,10 @@ export default class View {
         this.space = space;
         this.ctx = doc.canvas.getContext("2d")!;
         this.ctx2 = doc.canvas2.getContext("2d")!;   
+    }
+
+    clearCanvas2() {
+        this.ctx2.clearRect(0, 0, doc.canvas2.width, doc.canvas2.height);
     }
 
     draw() {
@@ -56,17 +60,17 @@ export default class View {
 
     drawWire(wire: Wire) {
         const ctx = this.ctx;
-        ctx.lineWidth = this.space.selectedWire == wire ? 6 : 3;
+        ctx.lineWidth = this.space.selectedWire == wire ? 6 : 4;
 
         //
-        ctx.strokeStyle = 'green';
+        ctx.strokeStyle = 'white';
         ctx.beginPath();  
         ctx.moveTo(wire.x, 0);
         ctx.lineTo(wire.x, doc.canvas.height);
         ctx.stroke();            
         // anime
-        const T = 50;
-        let J = 25
+        const T = 20;
+        let J = 10;
         ctx.strokeStyle = 'blue';
         ctx.beginPath();  
         let y =  -Math.sign(wire.j) * glo.time % T ;
@@ -81,13 +85,13 @@ export default class View {
     // Draws magnetic field in the whole space.
     //
     drawB() {
-        const dx = 8;
+        const d = 8, d2 = d / 2;
         const ctx = this.ctx;
 
-        for (let x = 0; x < this.space.width; x += dx) {
-            for (let y = 0; y < this.space.height; y += dx)  {
+        for (let x = 0; x < this.space.width; x += d) {
+            for (let y = 0; y < this.space.height; y += d)  {
 
-                let p = vec2.fromValues(x + dx/2, y + dx/2);
+                let p = vec2.fromValues(x - d2, y - d2);
                 let B = this.space.BatR(p);
                 let deep = 255 * (1 - Math.abs(B) / this.Bmax);
                 if (deep > 255) deep = 255
@@ -96,7 +100,7 @@ export default class View {
                 } else {
                     ctx.fillStyle = `rgb(255 255 ${deep} / 50%)`;  
                 }
-                ctx.fillRect(x, y, dx, dx);
+                ctx.fillRect(x - d2, y - d2, d, d);
             }
         }
 

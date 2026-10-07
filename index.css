@@ -85,10 +85,14 @@ section {
    width: var(--canvas-width);
 } 
 
-.scene-textarea {
+.scene-select {
     display: inline; 
     height: var(--element-height);
-    width: calc(var(--canvas-width) - 156px);
+    width: calc(var(--canvas-width) - 310px);
+}
+.scene-name {
+    display: inline; 
+    width: 150px !important;
 }
 .scene-btn {
     vertical-align: top; 

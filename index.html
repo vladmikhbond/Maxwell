@@ -22,7 +22,7 @@
             <option value="Wire">Wire</option>
         </select>
 
-        <input id="infoParams" type="text" value="name: '', W: 500, H: 500, sm: 0.0" style="display: none;">
+        <input id="infoParams" type="text" value="W: 600, H: 600, sm: 0.0" style="display: none;">
         <input id="chargeParams" type="text" value="q: 100, vx: 1, vy: 1, m: 1, fixed: 0" style="display: inline;">
         <input id="wireParams" type="text" value="x: 250, j: 1e-5" style="display: none;">
         <input id="magnetParams" type="text" value="" style="display: none;">
@@ -55,7 +55,9 @@
       <!-- ------------------bottom panel------------------  -->
       <div class="bottom-panel">
           <button id="saveSceneButton" class="scene-btn" title="Save script">✔</button>
-          <select id="savedInStore" class="scene-textarea" ></select>
+          <input id="sceneName" type="text" class="scene-name" >
+          <select id="savedInStore" class="scene-select" ></select>
+
           <button id="loadSceneButton" class="scene-btn" title="Delete script">❌</button>
       </div>
  

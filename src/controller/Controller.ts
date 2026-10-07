@@ -45,6 +45,13 @@ export default class Controller
         (document.getElementById("eRange") as HTMLInputElement).dispatchEvent(new Event('change'));
         (document.getElementById("createMode") as HTMLInputElement).dispatchEvent(new Event('change'));
         (document.getElementById("saveSceneButton") as HTMLInputElement).dispatchEvent(new Event('click'));
+        // треба імітувати натискання клавіши Enter
+        (document.getElementById("infoParams") as HTMLInputElement).dispatchEvent(new KeyboardEvent('keydown', {
+            key: 'Enter',
+            code: 'Enter',
+            bubbles: true,
+            cancelable: true
+        }));
     }
 
     //#region CreateMode property
@@ -185,7 +192,7 @@ export default class Controller
         {
             glo.isTracing = (e.target as HTMLInputElement).checked;
             if (!glo.isTracing) {
-                this.view.ctx2.clearRect(0, 0, doc.canvas2.width, doc.canvas2.height);
+                this.view.clearCanvas2();
             }
             this.view.draw();
         });
@@ -201,15 +208,16 @@ export default class Controller
     addDataHandlers() 
     {
  
-        const savedSelect = <HTMLSelectElement>document.getElementById("savedInStore"); 
+        const savedInStore = <HTMLSelectElement>document.getElementById("savedInStore"); 
+        const sceneName = <HTMLInputElement>document.getElementById("sceneName"); 
 
         fillSavedSelectOptions();
 
         // Put script to local store
         //
         document.getElementById("saveSceneButton")!.addEventListener("click", () => {
-            const params = getInfoParams();
-            let key = params.name;
+
+            let key = sceneName.value;
             const val = Store.serialize(this.space);
             localStorage.setItem(key, val);
             fillSavedSelectOptions();
@@ -217,14 +225,15 @@ export default class Controller
 
         // Get script from local store
         // 
-        savedSelect.addEventListener("change",  () => {
-            let key = savedSelect.selectedOptions[0].value
+        savedInStore.addEventListener("change",  () => {
+            let key = savedInStore.selectedOptions[0].value
             const val = localStorage.getItem(key);
             if (val) {
                 let space = Store.deserialize(val);
                 if (space) {
                     Object.assign(this.space, space); 
                     this.view.draw();
+                    this.view.clearCanvas2();
                 }
             }
         });     
@@ -232,7 +241,7 @@ export default class Controller
         // Remove script from local store
         //
         document.getElementById("loadSceneButton")!.addEventListener("click", () => {
-            let key = savedSelect.selectedOptions[0].value;
+            let key = savedInStore.selectedOptions[0].value;
             restoreSpace(key);
         });
 
@@ -241,13 +250,13 @@ export default class Controller
         function fillSavedSelectOptions() {
             const keys = Object.keys(localStorage);
             keys.sort();
-            savedSelect.innerHTML = "";
+            savedInStore.innerHTML = "";
             // Add options to savedSelect element. One option for every key.
             keys.forEach((key) => {
                 const option = document.createElement("option");
                 option.value = key;
                 option.textContent = key;
-                savedSelect.appendChild(option);
+                savedInStore.appendChild(option);
             });
         }
 
