@@ -40,18 +40,19 @@ export default class Controller
         this.addEventHandlers();
         this.addDataHandlers();
 
-        // події для отримання первісних значень з елементів UI
-        (document.getElementById("bRange") as HTMLInputElement).dispatchEvent(new Event('change'));
-        (document.getElementById("eRange") as HTMLInputElement).dispatchEvent(new Event('change'));
-        (document.getElementById("createMode") as HTMLInputElement).dispatchEvent(new Event('change'));
-        (document.getElementById("saveSceneButton") as HTMLInputElement).dispatchEvent(new Event('click'));
-        // треба імітувати натискання клавіши Enter
+        // імітація натискання клавіши Enter в полі infoParams
         (document.getElementById("infoParams") as HTMLInputElement).dispatchEvent(new KeyboardEvent('keydown', {
             key: 'Enter',
             code: 'Enter',
             bubbles: true,
             cancelable: true
         }));
+        // події для отримання первісних значень з елементів UI
+        (document.getElementById("bRange") as HTMLInputElement).dispatchEvent(new Event('change'));
+        (document.getElementById("eRange") as HTMLInputElement).dispatchEvent(new Event('change'));
+        (document.getElementById("createMode") as HTMLInputElement).dispatchEvent(new Event('change'));
+        (document.getElementById("saveSceneButton") as HTMLInputElement).dispatchEvent(new Event('click'));
+        
     }
 
     //#region CreateMode property

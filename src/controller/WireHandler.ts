@@ -27,6 +27,8 @@ export default class WireHandler extends Handler {
     }
 
     mouseup(e: MouseEvent) {
+        super.mouseup(e);
+        
         if (!this.isDrawing) 
             return;
 

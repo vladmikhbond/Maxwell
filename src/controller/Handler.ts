@@ -49,7 +49,17 @@ export default class Handler {
 
     }
 
-    mouseup(e: MouseEvent) { }
+    mouseup(e: MouseEvent) {
+        // Вибір об'єкту спричиняє перемикання режиму CreateMode
+        if (this.space.trySelectCharge(e.offsetX, e.offsetY)) {
+            select.value = 'Charge';
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        if (this.space.trySelectWire(e.offsetX)) {
+            select.value = 'Wire';
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+        }        
+    }
 
     keydown(e: KeyboardEvent) { 
         switch (e.key) {

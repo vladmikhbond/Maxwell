@@ -28,6 +28,8 @@ export default class ChargeHandler extends Handler {
     }
 
     mouseup(e: MouseEvent) {
+        super.mouseup(e);
+        
         if (!this.isDrawing) 
             return;
         this.isDrawing = false;
