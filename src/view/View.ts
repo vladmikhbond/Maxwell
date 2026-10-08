@@ -16,7 +16,7 @@ export default class View {
     ctx2: CanvasRenderingContext2D  // лише траси
 
     Bmax = 0   // макс напруж магнітного поля (встановлюється слайдером)
-    Emin = 0   // мін напруж електричного поля (встановлюється слайдером)
+    Emin = 1   // мін напруж електричного поля (встановлюється слайдером)
 
     constructor(space: Space) {
         this.space = space;

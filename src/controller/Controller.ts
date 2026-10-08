@@ -51,9 +51,20 @@ export default class Controller
         (document.getElementById("bRange") as HTMLInputElement).dispatchEvent(new Event('change'));
         (document.getElementById("eRange") as HTMLInputElement).dispatchEvent(new Event('change'));
         (document.getElementById("createMode") as HTMLInputElement).dispatchEvent(new Event('change'));
-        (document.getElementById("saveSceneButton") as HTMLInputElement).dispatchEvent(new Event('click'));
-        
+        (document.getElementById("saveSceneButton") as HTMLInputElement).dispatchEvent(new Event('click')); 
     }
+
+
+    changeSpaceSize() {
+        let [w, h] = [this.space.width, this.space.height];
+        document.documentElement.style.setProperty('--canvas-width', w+'px');
+        document.documentElement.style.setProperty('--canvas-height', h+'px');            
+        doc.canvas.height = h;
+        doc.canvas.width = w;
+        doc.canvas2.height = h;
+        doc.canvas2.width = w;
+    }
+
 
     //#region CreateMode property
     
@@ -99,16 +110,6 @@ export default class Controller
     }
 
     //#endregion CreateMode
-
-    changeSpaceSize() {
-        let [w, h] = [this.space.width, this.space.height];
-        document.documentElement.style.setProperty('--canvas-width', w+'px');
-        document.documentElement.style.setProperty('--canvas-height', h+'px');            
-        doc.canvas.height = h;
-        doc.canvas.width = w;
-        doc.canvas2.height = h;
-        doc.canvas2.width = w;
-    }
 
     addEventHandlers() 
     {
@@ -168,10 +169,9 @@ export default class Controller
         document.getElementById("eRange")?.addEventListener("change", e => 
         {
             let value = (e.target as HTMLSelectElement).value;
-            glo.isE = value !== '2';
+            // glo.isE = value !== '2';
 
-            this.view.Emin = +value; 
-            document.getElementById("eSpan")!.innerHTML = this.view.Emin.toFixed(1) ;
+            this.view.Emin = 1.1**(Number(value)); 
             this.view.draw();
         });
 
@@ -183,7 +183,7 @@ export default class Controller
             glo.isB = value !== '0';
 
             this.view.Bmax = 2**(-value); 
-            document.getElementById("bSpan")!.innerHTML = this.view.Bmax.toExponential(0) ;
+            
             this.view.draw();
         });
 
@@ -271,6 +271,7 @@ export default class Controller
         }
     }
 
+    //#region step-stop-run
  
     step() {
         this.space.step();
@@ -298,4 +299,5 @@ export default class Controller
         }, glo.TIME_INTERVAL);
     }
 
+    //#endregion
 }
