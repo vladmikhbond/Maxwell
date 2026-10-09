@@ -121,6 +121,8 @@ export default class Controller
                 this.space.width = params.W;
                 this.space.height = params.H;
                 this.space.steadyMagnetic = params.sm;
+                glo.isE = params.e == 1;
+                glo.isB = params.b == 1;
                 this.changeSpaceSize();
                 this.view.draw();
             }
@@ -169,8 +171,6 @@ export default class Controller
         document.getElementById("eRange")?.addEventListener("change", e => 
         {
             let value = (e.target as HTMLSelectElement).value;
-            // glo.isE = value !== '2';
-
             this.view.Emin = 1.1**(Number(value)); 
             this.view.draw();
         });
@@ -180,10 +180,7 @@ export default class Controller
         document.getElementById("bRange")?.addEventListener("change", e => 
         {
             let value = (e.target as HTMLSelectElement).value;
-            glo.isB = value !== '0';
-
             this.view.Bmax = 2**(-value); 
-            
             this.view.draw();
         });
 
@@ -203,7 +200,10 @@ export default class Controller
             if (this.timer) this.stop(); 
             else this.run();           
         });
-
+        
+        document.getElementById("helpButton")!.addEventListener("click", () => {
+            window.open("help.html", "_blank")?.focus();
+        });
     }
 
     addDataHandlers() 
