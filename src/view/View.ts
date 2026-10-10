@@ -18,8 +18,8 @@ export default class View {
     Bmax = 0   // макс напруж магнітного поля (встановлюється слайдером)
     Emin = 1   // мін напруж електричного поля (встановлюється слайдером)
 
-    shiftX = 0
-    shiftY = 0
+    translateX = 0
+    translateY = 0
     
     constructor(space: Space) {
         this.space = space;
@@ -35,7 +35,7 @@ export default class View {
         const ctx = this.ctx;
          ctx.clearRect(0, 0, doc.canvas.width, doc.canvas.height);
         ctx.save();
-        ctx.translate(this.shiftX, this.shiftY);
+        ctx.translate(this.translateX, this.translateY);
        
 
         // Magnetic field strength
@@ -52,7 +52,9 @@ export default class View {
             this.drawCharge(ch);
             // Track
             if (glo.isTracing) {
+                this.ctx2.translate(this.translateX, this.translateY);
                 this.ctx2.fillRect(ch.r[0] - 0.5, ch.r[1] - 0.5, 1, 1);
+                this.ctx2.translate(-this.translateX, -this.translateY);
             }
         }
 
@@ -67,7 +69,7 @@ export default class View {
     drawWire(wire: Wire) {
         const ctx = this.ctx;
         ctx.lineWidth = this.space.selectedWire == wire ? 6 : 4;
-
+        let x = wire.x - this.translateX;
         //
         ctx.strokeStyle = 'white';
         ctx.beginPath();  
@@ -94,11 +96,11 @@ export default class View {
         const d = 8, d2 = d / 2;
         const ctx = this.ctx;
 
-        for (let x = 0; x < doc.canvas.width; x += d) {
-            for (let y = 0; y < doc.canvas.height; y += d)  {
-
-                let p = vec2.fromValues(x - d2, y - d2);
-                let B = this.space.BatR(p);
+        for (let x_ = 0; x_ < doc.canvas.width; x_ += d) {
+            for (let y_ = 0; y_ < doc.canvas.height; y_ += d)  {
+                let x = x_ - this.translateX, y = y_- this.translateY;   
+                let r = vec2.fromValues(x - d2, y - d2);
+                let B = this.space.BatR(r);
                 let deep = 255 * (1 - Math.abs(B) / this.Bmax);
                 if (deep > 255) deep = 255
                 if (B < 0) {
@@ -196,9 +198,9 @@ export default class View {
         ctx.lineWidth = 1;
         ctx.strokeStyle = ctx.fillStyle = 'gray';
 
-        let params = getChargeParams()!;
+        // let params = getChargeParams()!;
 
-        let radius =  Math.hypot(x0 - x, y0 - y);
+        let radius =  Math.hypot(x0 - x, y0 - y) / 2;
         
         ctx.beginPath();        
         ctx.arc(x0, y0, radius, 0, Math.PI*2);

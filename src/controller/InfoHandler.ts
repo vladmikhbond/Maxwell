@@ -16,9 +16,10 @@ export default class InfoHandler extends Handler {
             let dy = e.offsetY - this.currentY;
             this.currentX = e.offsetX;
             this.currentY = e.offsetY;
-            this.view.shiftX += dx;
-            this.view.shiftY += dy;
+            this.view.translateX += dx;
+            this.view.translateY += dy;
             this.view.draw();
+            this.view.clearCanvas2();
         }
         // show info
         let r = vec2.fromValues(e.offsetX, e.offsetY)

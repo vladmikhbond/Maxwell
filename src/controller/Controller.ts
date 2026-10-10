@@ -56,7 +56,7 @@ export default class Controller
 
 
     changeSpaceSize() {
-        let [w, h] = [this.space.width, this.space.height];
+        let [w, h] = [doc.canvas.width, doc.canvas.height];
         document.documentElement.style.setProperty('--canvas-width', w+'px');
         document.documentElement.style.setProperty('--canvas-height', h+'px');            
         doc.canvas.height = h;
@@ -118,8 +118,8 @@ export default class Controller
         {
             if (e.key == "Enter") {
                 const params = getInfoParams();
-                this.space.width = params.W;
-                this.space.height = params.H;
+                doc.canvas.width = params.W;
+                doc.canvas.height = params.H;
                 this.space.steadyMagnetic = params.sm;
                 glo.isE = params.e == 1;
                 glo.isB = params.b == 1;

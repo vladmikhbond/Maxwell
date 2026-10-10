@@ -8,9 +8,6 @@ export const cross2 = (a: vec2, b: vec2) => a[0] * b[1] - a[1] * b[0];
 
 export default class Space 
 {
-
-    height = doc.canvas.height;
-    width = doc.canvas.width;
     charges: Charge[] = []
     wires: Wire[] = []
     steadyMagnetic = 0                  // 0.01
