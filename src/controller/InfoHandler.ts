@@ -25,7 +25,10 @@ export default class InfoHandler extends Handler {
         let r = vec2.fromValues(e.offsetX, e.offsetY)
         let E = this.space.EatR(r);
         let b = this.space.BatR(r);
-        doc.info.innerHTML = `Ex = ${E[0].toFixed(2)}, Ey = ${E[1].toFixed(2)}, Bz = ${b.toFixed(2)}`;     
+        let x = e.offsetX - this.view.translateX;
+        let y = e.offsetY - this.view.translateY;
+        doc.info.innerHTML = 
+           `Ex = ${E[0].toFixed(2)}, Ey = ${E[1].toFixed(2)}, Bz = ${b.toFixed(4)} (${Math.round(x)}, ${Math.round(y)})`;     
     }
 
     mouseup(e: MouseEvent) {

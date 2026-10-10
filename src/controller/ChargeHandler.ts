@@ -39,8 +39,10 @@ export default class ChargeHandler extends Handler {
             return;
         }   
 
-        let x1 = this.currentX, y1 = this.currentY;
-        let x2 = e.offsetX, y2 = e.offsetY;
+        let x1 = this.currentX, 
+            y1 = this.currentY,
+            x2 = e.offsetX, 
+            y2 = e.offsetY;
         let drawDist = Math.hypot(x2 - x1, y2 - y1);
 
         // just mouse click

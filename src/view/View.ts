@@ -69,22 +69,23 @@ export default class View {
     drawWire(wire: Wire) {
         const ctx = this.ctx;
         ctx.lineWidth = this.space.selectedWire == wire ? 6 : 4;
-        let x = wire.x - this.translateX;
+        let x = wire.x;
+        let y = -this.translateY, y1 = doc.canvas.height - this.translateY;
         //
-        ctx.strokeStyle = 'white';
+        ctx.strokeStyle = 'pink';
         ctx.beginPath();  
-        ctx.moveTo(wire.x, 0);
-        ctx.lineTo(wire.x, doc.canvas.height);
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y +  doc.canvas.height);
         ctx.stroke();            
         // anime
         const T = 20;
         let J = 10;
         ctx.strokeStyle = 'blue';
         ctx.beginPath();  
-        let y =  -Math.sign(wire.j) * glo.time % T ;
-        while (y < doc.canvas.height) {
-            ctx.moveTo(wire.x, y);
-            ctx.lineTo(wire.x, y + J);
+        y -= Math.sign(wire.j) * glo.time % T ;
+        while (y < y1) {
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y + J);
             y += T;
         }     
         ctx.stroke();        
