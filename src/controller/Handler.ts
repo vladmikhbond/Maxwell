@@ -32,8 +32,6 @@ export default class Handler {
     }
 
     mousemove(e: MouseEvent) {
-        // (<HTMLElement>document.getElementById('info2')!).innerHTML = `${e.offsetX}, ${e.offsetY}`;
-
         if (!this.isDrawing) {
             return;
         }
@@ -50,11 +48,12 @@ export default class Handler {
     }
 
     mouseup(e: MouseEvent) {
-        // Вибір об'єкту спричиняє перемикання режиму CreateMode
+        // Вибір заряду спричиняє перемикання на режим Charge
         if (this.space.trySelectCharge(e.offsetX, e.offsetY)) {
             select.value = 'Charge';
             select.dispatchEvent(new Event('change', { bubbles: true }));
         }
+        // Вибір провідника спричиняє перемикання на режим Wire
         if (this.space.trySelectWire(e.offsetX)) {
             select.value = 'Wire';
             select.dispatchEvent(new Event('change', { bubbles: true }));

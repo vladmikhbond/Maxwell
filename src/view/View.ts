@@ -9,7 +9,7 @@ import Wire from "../models/Wire.js";
 const RAYS = 6;
 
 export default class View {
-
+    
     space: Space
 
     ctx: CanvasRenderingContext2D
@@ -18,6 +18,9 @@ export default class View {
     Bmax = 0   // макс напруж магнітного поля (встановлюється слайдером)
     Emin = 1   // мін напруж електричного поля (встановлюється слайдером)
 
+    shiftX = 0
+    shiftY = 0
+    
     constructor(space: Space) {
         this.space = space;
         this.ctx = doc.canvas.getContext("2d")!;
@@ -30,7 +33,10 @@ export default class View {
 
     draw() {
         const ctx = this.ctx;
-        ctx.clearRect(0, 0, this.space.width, this.space.height);
+         ctx.clearRect(0, 0, this.space.width, this.space.height);
+        ctx.save();
+        ctx.translate(this.shiftX, this.shiftY);
+       
 
         // Magnetic field strength
         if (glo.isB) {
@@ -54,7 +60,7 @@ export default class View {
         for (let wi of this.space.wires) {
             this.drawWire(wi);
         }
-
+        ctx.restore();
     }
 
 

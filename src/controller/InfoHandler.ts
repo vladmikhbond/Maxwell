@@ -10,6 +10,17 @@ export default class InfoHandler extends Handler {
 
     mousemove(e: MouseEvent) {
         super.mousemove(e);
+        // 
+        if (this.isDrawing) {
+            let dx = e.offsetX - this.currentX;
+            let dy = e.offsetY - this.currentY;
+            this.currentX = e.offsetX;
+            this.currentY = e.offsetY;
+            this.view.shiftX += dx;
+            this.view.shiftY += dy;
+            this.view.draw();
+        }
+        // show info
         let r = vec2.fromValues(e.offsetX, e.offsetY)
         let E = this.space.EatR(r);
         let b = this.space.BatR(r);
@@ -18,6 +29,7 @@ export default class InfoHandler extends Handler {
 
     mouseup(e: MouseEvent) {
         super.mouseup(e);
+        this.isDrawing = false;
     }
 
 

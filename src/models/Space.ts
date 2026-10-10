@@ -83,7 +83,6 @@ export default class Space
         for (let wi of this.wires) {
             sum += wi.BatR(r);
         }
-        // console.log(sum)
         return sum;
     }
 

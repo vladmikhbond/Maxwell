@@ -242,7 +242,7 @@ export default class Controller
         // Remove script from local store
         //
         document.getElementById("loadSceneButton")!.addEventListener("click", () => {
-            let key = savedInStore.selectedOptions[0].value;
+            let key = sceneName.value;
             restoreSpace(key);
         });
 
