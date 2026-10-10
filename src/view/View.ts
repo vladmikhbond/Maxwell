@@ -33,7 +33,7 @@ export default class View {
 
     draw() {
         const ctx = this.ctx;
-         ctx.clearRect(0, 0, doc.canvas.width, doc.canvas.height);
+        ctx.clearRect(0, 0, doc.canvas.width, doc.canvas.height);
         ctx.save();
         ctx.translate(this.translateX, this.translateY);
        
@@ -66,7 +66,7 @@ export default class View {
     }
 
 
-    drawWire(wire: Wire) {
+    private drawWire(wire: Wire) {
         const ctx = this.ctx;
         ctx.lineWidth = this.space.selectedWire == wire ? 6 : 4;
         let x = wire.x;
@@ -93,7 +93,7 @@ export default class View {
 
     // Draws magnetic field in the whole space.
     //
-    drawB() {
+    private drawB() {
         const d = 8, d2 = d / 2;
         const ctx = this.ctx;
 
@@ -117,7 +117,7 @@ export default class View {
     }
     
     // Draws electric field in the whole space.
-    drawE() {
+    private drawE() {
         // Color
         this.ctx.strokeStyle = "rgb(0 0 255 / 50%)" ;
         this.ctx.lineWidth = 1;
@@ -137,7 +137,7 @@ export default class View {
     
     // Draw one charge as a white circle with a sign inside.
     //
-    drawCharge(ch: Charge) {
+    private drawCharge(ch: Charge) {
         let d = 1;
         if (ch === this.space.selectedCharge) {
             d = 2;
@@ -162,7 +162,7 @@ export default class View {
     }
 
     
-    drawRay(start: vec2, charge: Charge) 
+    private drawRay(start: vec2, charge: Charge) 
     {
         const K = 0.5;     // коеф. довжини сегменту ломаної
         const N_SEG = 1000; // макс кількість сегментів лінії поля
@@ -196,6 +196,8 @@ export default class View {
     
     drawGrayArc(x0: number, y0: number, x: number, y: number,) {
         const ctx = this.ctx;
+        ctx.save();
+        ctx.translate(this.translateX, this.translateY);        
         ctx.lineWidth = 1;
         ctx.strokeStyle = ctx.fillStyle = 'gray';
 
@@ -208,10 +210,13 @@ export default class View {
         ctx.moveTo(x0, y0);
         ctx.lineTo(x, y);
         ctx.stroke();
+        ctx.restore();
     }
 
     drawGrayVerLine(x: number) {
         const ctx = this.ctx;
+        ctx.save();
+        ctx.translate(this.translateX, 0);
         ctx.lineWidth = 1;
         ctx.strokeStyle = 'gray';
 
@@ -219,6 +224,7 @@ export default class View {
         ctx.moveTo(x, 0);
         ctx.lineTo(x, doc.canvas.height);
         ctx.stroke();        
+        ctx.restore();
     }
 
     //#endregion Gray Zone    

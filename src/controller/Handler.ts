@@ -48,13 +48,16 @@ export default class Handler {
     }
 
     mouseup(e: MouseEvent) {
+        let offsetX = e.offsetX - this.view.translateX,
+            offsetY = e.offsetY - this.view.translateY; 
+
         // Вибір заряду спричиняє перемикання на режим Charge
-        if (this.space.trySelectCharge(e.offsetX, e.offsetY)) {
+        if (this.space.trySelectCharge(offsetX, offsetY)) {
             select.value = 'Charge';
             select.dispatchEvent(new Event('change', { bubbles: true }));
         }
         // Вибір провідника спричиняє перемикання на режим Wire
-        if (this.space.trySelectWire(e.offsetX)) {
+        if (this.space.trySelectWire(offsetX)) {
             select.value = 'Wire';
             select.dispatchEvent(new Event('change', { bubbles: true }));
         }        

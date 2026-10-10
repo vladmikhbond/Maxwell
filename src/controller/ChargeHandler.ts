@@ -12,7 +12,9 @@ export default class ChargeHandler extends Handler {
         super.mousedown(e);
         // якщо курсор в середені обраного заряду, таскати його
         let sel = this.space.selectedCharge;
-        if (sel && sel.isInside(vec2.fromValues(e.offsetX, e.offsetY))) {
+        let offsetX = e.offsetX - this.view.translateX,
+            offsetY = e.offsetY - this.view.translateY; 
+        if (sel && sel.isInside(vec2.fromValues(offsetX, offsetY))) {
             this.draggingObject = sel;
         }          
     }
@@ -21,9 +23,12 @@ export default class ChargeHandler extends Handler {
         super.mousemove(e);
         if (!this.isDrawing) 
             return;
-
+        let currentX = this.currentX - this.view.translateX,
+            currentY = this.currentY - this.view.translateY,
+            offsetX = e.offsetX - this.view.translateX,
+            offsetY = e.offsetY - this.view.translateY; 
         this.view.draw();
-        this.view.drawGrayArc(this.currentX, this.currentY, e.offsetX, e.offsetY);
+        this.view.drawGrayArc(currentX, currentY, offsetX, offsetY);
         
     }
 
@@ -39,10 +44,11 @@ export default class ChargeHandler extends Handler {
             return;
         }   
 
-        let x1 = this.currentX, 
-            y1 = this.currentY,
-            x2 = e.offsetX, 
-            y2 = e.offsetY;
+        let x1 = this.currentX - this.view.translateX, 
+            y1 = this.currentY - this.view.translateY,
+            x2 = e.offsetX - this.view.translateX, 
+            y2 = e.offsetY - this.view.translateY;
+
         let drawDist = Math.hypot(x2 - x1, y2 - y1);
 
         // just mouse click
