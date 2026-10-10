@@ -33,7 +33,7 @@ export default class View {
 
     draw() {
         const ctx = this.ctx;
-         ctx.clearRect(0, 0, this.space.width, this.space.height);
+         ctx.clearRect(0, 0, doc.canvas.width, doc.canvas.height);
         ctx.save();
         ctx.translate(this.shiftX, this.shiftY);
        
@@ -94,8 +94,8 @@ export default class View {
         const d = 8, d2 = d / 2;
         const ctx = this.ctx;
 
-        for (let x = 0; x < this.space.width; x += d) {
-            for (let y = 0; y < this.space.height; y += d)  {
+        for (let x = 0; x < doc.canvas.width; x += d) {
+            for (let y = 0; y < doc.canvas.height; y += d)  {
 
                 let p = vec2.fromValues(x - d2, y - d2);
                 let B = this.space.BatR(p);
