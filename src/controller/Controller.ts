@@ -22,6 +22,7 @@ export default class Controller
 
     public space: Space;
     public view: View;
+
     chargeHandler: ChargeHandler;
     wireHandler: WireHandler;
     infoHandler: InfoHandler;
@@ -272,14 +273,20 @@ export default class Controller
     }
 
     //#region step-stop-run
- 
+    
+    timestamp = Date.now();
+
     step() {
+        const DELTA_T = 10;
         this.space.step();
         this.view.draw();
         glo.time++; 
         //
-        if (glo.time % 10 == 0) {
-            doc.info.innerHTML = glo.time.toString();
+        if (glo.time % DELTA_T == 0) {
+            
+            let t = DELTA_T / (Date.now() - this.timestamp);
+            this.timestamp = Date.now(); 
+            doc.info.innerHTML = `${glo.time} --${t.toFixed(2)}--`;
         }
     }
 
@@ -294,7 +301,8 @@ export default class Controller
     run() {
         if (this.timer) 
             return;
-        this.timer = setInterval(() => { 
+        this.timer = setInterval(() => {
+            this.timestamp = Date.now(); 
             this.step();
         }, glo.TIME_INTERVAL);
     }

@@ -52,11 +52,17 @@ export default class View {
             this.drawCharge(ch);
             // Track
             if (glo.isTracing) {
-                this.ctx2.translate(this.translateX, this.translateY);
-                this.ctx2.fillRect(ch.r[0] - 1, ch.r[1] - 1, 2, 2);
-                 
+                 ctx.beginPath()
+                 let last = ch.track[ch.track.length - 1];
+                 ctx.moveTo(last[0], last[1]);
+                 for(let i = ch.track.length - 1; i > 0; i--) {
+                    ctx.lineTo(ch.track[i][0], ch.track[i][1]);
+                 }
+                 ctx.stroke()
 
-                this.ctx2.translate(-this.translateX, -this.translateY);
+                // this.ctx2.translate(this.translateX, this.translateY);
+                // this.ctx2.fillRect(ch.r[0] - 1, ch.r[1] - 1, 2, 2);
+                // this.ctx2.translate(-this.translateX, -this.translateY);
             }
         }
 

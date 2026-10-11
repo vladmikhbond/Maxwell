@@ -72,11 +72,15 @@ export default class Charge {
    }
 
    move(dx:number, dy: number) {
+      const N_TRACK = 300; 
       // track
-      if (this.track.length > 100) {
-         this.track.splice(0, 50);
+      if (this.track.length > N_TRACK) {
+         this.track.splice(0, N_TRACK / 10);
       }
-      this.track.push([this.r[0], this.r[1]])
+      let last = this.track[this.track.length - 1];
+      if (Math.hypot(this.r[0] + dx - last[0], this.r[1] + dx - last[1]) > 5) {
+         this.track.push([this.r[0], this.r[1]]);
+      }
       
       // move
       this.r[0] += dx;
