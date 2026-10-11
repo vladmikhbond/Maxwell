@@ -49,7 +49,7 @@ export default class Space
             }
              
             // coordinates
-            vec2.add(ch.r, ch.r, ch.v);
+            ch.move(ch.v[0], ch.v[1])
 
         }
     }

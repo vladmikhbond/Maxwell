@@ -1,6 +1,8 @@
 import { vec2 } from 'gl-matrix';
 import { glo } from "../globals.js";
 
+type Pair = [number, number];
+
 export default class Charge {
    
    r: vec2
@@ -8,14 +10,16 @@ export default class Charge {
    q: number
    m: number 
    fixed: boolean
+   track: Pair[]
 
 
    constructor(q: number, x: number, y: number, vx: number, vy: number, m=1, fixed=false) {
-      this.r = vec2.fromValues(x, y)
-      this.v =  vec2.fromValues(vx, vy)
-      this.q = q
-      this.m = m 
-      this.fixed = fixed
+      this.r = vec2.fromValues(x, y);
+      this.v =  vec2.fromValues(vx, vy);
+      this.q = q;
+      this.m = m;
+      this.fixed = fixed;
+      this.track = [[x, y]];
    }
 
 
@@ -68,6 +72,13 @@ export default class Charge {
    }
 
    move(dx:number, dy: number) {
+      // track
+      if (this.track.length > 100) {
+         this.track.splice(0, 50);
+      }
+      this.track.push([this.r[0], this.r[1]])
+      
+      // move
       this.r[0] += dx;
       this.r[1] += dy;
    }
