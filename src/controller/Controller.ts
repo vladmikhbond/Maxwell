@@ -278,7 +278,7 @@ export default class Controller
         this.view.draw();
         glo.time++; 
         //
-        if (glo.time % 10 ==0) {
+        if (glo.time % 10 == 0) {
             doc.info.innerHTML = glo.time.toString();
         }
     }

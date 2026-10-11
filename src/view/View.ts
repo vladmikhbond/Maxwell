@@ -53,7 +53,9 @@ export default class View {
             // Track
             if (glo.isTracing) {
                 this.ctx2.translate(this.translateX, this.translateY);
-                this.ctx2.fillRect(ch.r[0] - 0.5, ch.r[1] - 0.5, 1, 1);
+                this.ctx2.fillRect(ch.r[0] - 1, ch.r[1] - 1, 2, 2);
+                 
+
                 this.ctx2.translate(-this.translateX, -this.translateY);
             }
         }
