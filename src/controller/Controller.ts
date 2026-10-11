@@ -277,13 +277,15 @@ export default class Controller
     timestamp = Date.now();
 
     step() {
-        const DELTA_T = 10;
+         
         this.space.step();
         this.view.draw();
         glo.time++; 
-        //
+
+        // show time & speed
+        
+        const DELTA_T = 10; 
         if (glo.time % DELTA_T == 0) {
-            
             let t = DELTA_T / (Date.now() - this.timestamp);
             this.timestamp = Date.now(); 
             doc.info.innerHTML = `${glo.time} --${t.toFixed(2)}--`;

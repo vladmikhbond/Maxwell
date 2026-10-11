@@ -1,4 +1,2 @@
-draw traces
 
-показ швидкодію
 help
