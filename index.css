@@ -31,13 +31,14 @@ input[type="checkbox"] {
 }
 
 input[type="text"] {
-    width: 360px;
+    /* width: 360px; */
+    width: calc(var(--canvas-width) - 225px);
     padding: 10px;
     text-align: center;
 }
 
 input[type="range"] {
-    width: 120px;
+    width: calc((var(--canvas-width) - 220px) / 2);
 }
 
 #helpButton {
@@ -81,14 +82,14 @@ section {
 
 /* <!------------------ bottom panel ----------------> */
 .bottom-panel {
-   margin-top: 4px;
-   width: var(--canvas-width);
+   margin-top: 8px;
+
 } 
 
 .scene-select {
     display: inline; 
     height: var(--element-height);
-    width: calc(var(--canvas-width) - 310px);
+    width: calc(var(--canvas-width) - 305px);
 }
 .scene-name {
     display: inline; 
