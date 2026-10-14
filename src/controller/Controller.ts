@@ -56,7 +56,7 @@ export default class Controller
     }
 
 
-    changeSpaceSize() {
+    private changeSpaceSize() {
         let [w, h] = [doc.canvas.width, doc.canvas.height];
         document.documentElement.style.setProperty('--canvas-width', w+'px');
         document.documentElement.style.setProperty('--canvas-height', h+'px');            
@@ -66,6 +66,20 @@ export default class Controller
         doc.canvas2.width = w;
     }
 
+    // Restore the space from a storage by a key.
+    // 
+    private restoreSpace(key: string, storage: Storage) {
+        const val = storage.getItem(key);
+        if (val) {
+            let space = Store.deserialize(val);
+            if (space) {
+                Object.assign(this.space, space); 
+                this.view.draw();
+                this.view.clearCanvas2();
+                this.stop();
+            }
+        }            
+    }    
 
     //#region CreateMode property
     
@@ -196,80 +210,81 @@ export default class Controller
             this.view.draw();
         });
 
-        document.getElementById("runButton")?.addEventListener("click", e => 
-        {
-            if (this.timer) this.stop(); 
-            else this.run();           
-        });
-        
+        document.getElementById("runButton")?.addEventListener("click", e => {
+            const KEY = "run";
+
+            if (this.timer) {
+                this.stop();
+            } else { 
+                this.run();
+                if (e.ctrlKey) {
+                    // loading a temporary scene
+                    this.restoreSpace(KEY, sessionStorage);     
+                } else {
+                    // saving a temporary scene
+                    const val = Store.serialize(this.space);
+                    sessionStorage.setItem(KEY, val);
+                }
+            }
+        }); 
+
         document.getElementById("helpButton")!.addEventListener("click", () => {
             window.open("help.html", "_blank")?.focus();
         });
     }
 
+
     addDataHandlers() 
     {
- 
-        const savedInStore = <HTMLSelectElement>document.getElementById("savedInStore"); 
+        const savingSelect = <HTMLSelectElement>document.getElementById("savingSelect"); 
         const sceneName = <HTMLInputElement>document.getElementById("sceneName"); 
+        const saveSceneButton = <HTMLButtonElement>document.getElementById("saveSceneButton");
+        const removeSceneButton = <HTMLButtonElement>document.getElementById("removeSceneButton");
 
         fillSavedSelectOptions();
 
-        // Put script to local store
+        // Put a script to the local store
         //
-        document.getElementById("saveSceneButton")!.addEventListener("click", () => {
-
+        saveSceneButton.addEventListener("click", () => {
             let key = sceneName.value;
             const val = Store.serialize(this.space);
             localStorage.setItem(key, val);
             fillSavedSelectOptions();
         });
 
-        // Get script from local store
+        // Get a script from the local store
         // 
-        savedInStore.addEventListener("change",  () => {
-            let key = savedInStore.selectedOptions[0].value
-            const val = localStorage.getItem(key);
-            if (val) {
-                let space = Store.deserialize(val);
-                if (space) {
-                    Object.assign(this.space, space); 
-                    this.view.draw();
-                    this.view.clearCanvas2();
-                }
-            }
+        savingSelect.addEventListener("change",  () => {
+            let key = savingSelect.selectedOptions[0].value
+            this.restoreSpace(key, localStorage);
         });     
  
-        // Remove script from local store
+        // Remove a script from the local store
         //
-        document.getElementById("loadSceneButton")!.addEventListener("click", () => {
+        removeSceneButton.addEventListener("click", () => {
             let key = sceneName.value;
-            restoreSpace(key);
+            const val = localStorage.getItem(key);
+            if (val) {
+                localStorage.removeItem(key);
+                fillSavedSelectOptions();
+            }
         });
 
-        // ---------------------- helper funcs -----------------------
+        // ---------------------- helper functions -----------------------
 
         function fillSavedSelectOptions() {
             const keys = Object.keys(localStorage);
             keys.sort();
-            savedInStore.innerHTML = "";
+            savingSelect.innerHTML = "";
             // Add options to savedSelect element. One option for every key.
             keys.forEach((key) => {
                 const option = document.createElement("option");
                 option.value = key;
                 option.textContent = key;
-                savedInStore.appendChild(option);
+                savingSelect.appendChild(option);
             });
         }
 
-        function restoreSpace(key: string) {
-            const val = localStorage.getItem(key);
-            if (val) {
-                let space = Store.deserialize(val)
-                localStorage.removeItem(key);
-                fillSavedSelectOptions();
-            }
-        }
     }
 
     //#region step-stop-run
