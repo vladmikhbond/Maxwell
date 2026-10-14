@@ -257,6 +257,7 @@ export default class Controller
         savingSelect.addEventListener("change",  () => {
             let key = savingSelect.selectedOptions[0].value
             this.restoreSpace(key, localStorage);
+            savingSelect.selectedIndex = -1;
         });     
  
         // Remove a script from the local store
