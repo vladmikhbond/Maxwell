@@ -19,7 +19,7 @@ export default class Wire {
             return 0;
         } 
         // Bz
-        const Bz = glo.Ke * 2 * this.j / (glo.C * glo.C *radius);
+        const Bz = 2 * this.j / (glo.Ke * glo.Kb * glo.Kb * radius);
         return Bz;
     }
     

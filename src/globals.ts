@@ -1,14 +1,8 @@
-const Ke = 1000;
-const Kb = 0.002;
-
 
 export const glo = 
 {
-    Ke: Ke,     // стала в законі Кулона 
-    Kb: Kb,     // стала в законі Ампера
-    eps0: 1 / (Ke * 4 * Math.PI),  
-    miu0: Kb * 4 * Math.PI,        
-    C: Ke * Kb,
+    Ke: 1000,     // стала в законі Кулона 
+    Kb: 0.002,    // стала в законі Ампера      
     SCALE: 1,
     TIME_INTERVAL: 5,
     time: 0,      // time in ticks (1 sec = 1000/INTERVAL ticks)

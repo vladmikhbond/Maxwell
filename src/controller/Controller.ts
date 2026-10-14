@@ -136,8 +136,10 @@ export default class Controller
                 doc.canvas.width = params.W;
                 doc.canvas.height = params.H;
                 this.space.steadyMagnetic = params.sm;
-                glo.isE = params.e == 1;
-                glo.isB = params.b == 1;
+                glo.isE = params.Ke > 0;
+                glo.isB = params.Kb > 0;
+                glo.Ke = params.Ke;
+                glo.Kb = params.Kb;
                 this.changeSpaceSize();
                 this.view.draw();
             }
