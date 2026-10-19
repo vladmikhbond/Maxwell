@@ -238,7 +238,7 @@ export default class Controller
 
     addDataHandlers() 
     {
-        const savingSelect = <HTMLSelectElement>document.getElementById("savingSelect"); 
+        const sceneSelect = <HTMLSelectElement>document.getElementById("sceneSelect"); 
         const sceneName = <HTMLInputElement>document.getElementById("sceneName"); 
         const saveSceneButton = <HTMLButtonElement>document.getElementById("saveSceneButton");
         const removeSceneButton = <HTMLButtonElement>document.getElementById("removeSceneButton");
@@ -256,10 +256,10 @@ export default class Controller
 
         // Get a script from the local store
         // 
-        savingSelect.addEventListener("change",  () => {
-            let key = savingSelect.selectedOptions[0].value
+        sceneSelect.addEventListener("change",  () => {
+            let key = sceneSelect.selectedOptions[0].value
             this.restoreSpace(key, localStorage);
-            savingSelect.selectedIndex = -1;
+            sceneSelect.selectedIndex = -1;
         });     
  
         // Remove a script from the local store
@@ -278,13 +278,13 @@ export default class Controller
         function fillSavedSelectOptions() {
             const keys = Object.keys(localStorage);
             keys.sort();
-            savingSelect.innerHTML = "";
+            sceneSelect.innerHTML = "";
             // Add options to savedSelect element. One option for every key.
             keys.forEach((key) => {
                 const option = document.createElement("option");
                 option.value = key;
                 option.textContent = key;
-                savingSelect.appendChild(option);
+                sceneSelect.appendChild(option);
             });
         }
 
