@@ -1,5 +1,5 @@
 import Handler from './Handler.js';
-import { getWireParams, setWireParams } from './params.js';
+import { getParams, setWireParams } from './params.js';
 import Wire from '../models/Wire.js';
 
 
@@ -55,7 +55,7 @@ export default class WireHandler extends Handler {
             }
         } else {
             // Create new wire & select it
-            let params = getWireParams();
+            let params = getParams("wireParams");
 
             const newWire = new Wire(x2, params.j);
             this.space.wires.push(newWire);

@@ -4,7 +4,7 @@ import Space from "../models/Space.js";
 import View from "../view/View.js";
 import ChargeHandler from "./ChargeHandler.js";
 import Handler from "./Handler.js";
-import { getInfoParams, getChargeParams, getWireParams } from "./params.js";
+import { getParams} from "./params.js";
 import Store from "../data/Store.js";
 import WireHandler from "./WireHandler.js";
 import InfoHandler from "./InfoHandler.js";
@@ -69,15 +69,9 @@ export default class Controller
     // Restore the space from a storage by a key.
     // 
     private restoreSpace(key: string, storage: Storage) {
-        const val = storage.getItem(key);
-        if (val) {
-            let space = Store.deserialize(val);
-            if (space) {
-                Object.assign(this.space, space); 
-                this.view.draw();
-                this.view.clearCanvas2();
-                this.stop();
-            }
+        const jsonStr = storage.getItem(key);
+        if (jsonStr) {
+            this.setCurrentModelWithJson(jsonStr);
         }            
     }    
 
@@ -132,9 +126,9 @@ export default class Controller
         document.getElementById("infoParams")!.addEventListener("keydown", (e: KeyboardEvent) => 
         {
             if (e.key == "Enter") {
-                const params = getInfoParams();
-                doc.canvas.width = params.W;
-                doc.canvas.height = params.H;
+                const params = getParams("infoParams");
+                doc.canvas.width = params.w;
+                doc.canvas.height = params.h;
                 this.space.steadyMagnetic = params.sm;
                 glo.isE = params.Ke > 0;
                 glo.isB = params.Kb > 0;
@@ -149,7 +143,7 @@ export default class Controller
         document.getElementById("chargeParams")!.addEventListener("keydown", (e: KeyboardEvent) => 
         {
             if (e.key == "Enter") {
-                const params = getChargeParams();
+                const params = getParams("chargeParams");
                 const selCharge = this.space.selectedCharge;
                 if (params && selCharge) {
                     selCharge.v = vec2.fromValues(params.vx, params.vy);
@@ -165,7 +159,7 @@ export default class Controller
         document.getElementById("wireParams")!.addEventListener("keydown", (e: KeyboardEvent) => 
         {
             if (e.key == "Enter") {
-                const params = getWireParams();
+                const params = getParams("wireParams");
                 const selWire = this.space.selectedWire;
                 if (params && selWire) {
                     selWire.x = params.x;
@@ -235,6 +229,20 @@ export default class Controller
         });
     }
 
+    getCurrentModelAsJson() {
+        return Store.serialize(this.space);
+    }
+
+    setCurrentModelWithJson(jsonStr: string) {
+        let space = Store.deserialize(jsonStr); 
+        if (space) {
+            Object.assign(this.space, space); 
+            this.view.draw();
+            this.view.clearCanvas2();
+            this.stop();
+        }
+    }
+
 
     addDataHandlers() 
     {
@@ -249,14 +257,14 @@ export default class Controller
         //
         saveSceneButton.addEventListener("click", () => {
             let key = sceneName.value;
-            const val = Store.serialize(this.space);
+            const val = this.getCurrentModelAsJson()   ////
             localStorage.setItem(key, val);
             fillSavedSelectOptions();
         });
 
         // Get a script from the local store
         // 
-        sceneSelect.addEventListener("change",  () => {
+        sceneSelect.addEventListener("change", () => {
             let key = sceneSelect.selectedOptions[0].value
             this.restoreSpace(key, localStorage);
             sceneSelect.selectedIndex = -1;

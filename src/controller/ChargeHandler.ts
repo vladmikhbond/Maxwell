@@ -1,6 +1,6 @@
 import { vec2 } from 'gl-matrix';
 import Handler from './Handler.js';
-import { getChargeParams, setChargeParams } from './params.js';
+import { getParams, setChargeParams } from './params.js';
 import Charge from '../models/Charge.js';
 
 
@@ -60,7 +60,7 @@ export default class ChargeHandler extends Handler {
             }
         } else {
             // Create new charge & select it
-            let params = getChargeParams();
+            let params = getParams("chargeParams");
             if (params) {
                 let vx = (x2 - x1) / 10;
                 let vy = (y2 - y1) / 10;

@@ -2,7 +2,7 @@ import Space from "../models/Space.js";
 import { glo, doc } from "../globals.js"; 
 import { vec2 } from "gl-matrix";
 import Charge from "../models/Charge.js";
-import { getChargeParams } from "../controller/params.js";
+import { getParams } from "../controller/params.js";
 import Wire from "../models/Wire.js";
 
 // Кількість ліній з одиничного заряду
@@ -209,7 +209,6 @@ export default class View {
         ctx.lineWidth = 1;
         ctx.strokeStyle = ctx.fillStyle = 'gray';
 
-        // let params = getChargeParams()!;
 
         let radius =  Math.hypot(x0 - x, y0 - y) / 2;
         
